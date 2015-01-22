@@ -1,0 +1,3 @@
+main : func (args : Array(String)) -> void {
+	print("Hello, World!")
+}
