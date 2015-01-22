@@ -1,0 +1,47 @@
+Animal : Obj {
+    protected sound : String
+    public name : String where !name.equals("")
+    
+    Animal : func (name : String) -> Animal {
+        this.name = name
+    }
+    
+    speak : func () -> String {
+        return "$(this.name) says $(this.sound)"
+    }
+}
+
+Cow : Animal {
+    final public sound := "moooo"
+
+    Cow : func (name : String) -> Cow {
+        this.name = name
+    }
+}
+
+Horse : Animal {
+    final public sound := "neigh"
+
+    Horse : func (name : String) -> Horse {
+        this.name = name
+    }
+}
+
+Sheep : Animal {
+    final public sound := "baaaa"
+
+    Sheep : func (name : String) -> Sheep {
+        this.name = name
+    }
+}
+
+main : func (args : Array(String)) -> void {
+    h := Horse("CJ")
+    print(h.speak())
+
+    c := Cow("Bessie")
+    print(h.speak())
+
+    print(Sheep("Little Lamb").speak())
+}
+}
