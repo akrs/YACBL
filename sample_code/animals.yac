@@ -1,5 +1,5 @@
 Animal : Obj {
-    protected sound : String
+    final public sound : String
     public name : String where !name.equals("")
     
     Animal : func (name : String) -> Animal {
