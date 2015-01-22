@@ -44,4 +44,3 @@ main : func (args : Array(String)) -> void {
 
     print(Sheep("Little Lamb").speak())
 }
-}
