@@ -16,6 +16,6 @@
     },
 
     "scripts": {
-        "test": "mocha --compilers coffee:coffee-script/register ./test/test*.coffee"
+        "test": "mocha --compilers coffee:coffee-script/register ./tests/test*.coffee"
     }
 }
