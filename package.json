@@ -8,7 +8,9 @@
     },
 
     "dependencies": {
-        "coffee-script": "latest"
+        "coffee-script": "latest",
+        "byline": "latest",
+        "xregexp": "latest"
     },
     "devDependencies": {
         "mocha": "latest",
@@ -16,6 +18,6 @@
     },
 
     "scripts": {
-        "test": "mocha --compilers coffee:coffee-script/register ./tests/test*.coffee"
+        "test": "mocha --compilers coffee:coffee-script/register ./tests/test_*.coffee"
     }
 }
