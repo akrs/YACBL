@@ -43,16 +43,15 @@ module.exports = (filename, callback) ->
         tokens.push {kind: 'EOF', lexeme: 'EOF'}
         callback tokens
 
-emit = (kind, lexeme) ->
-    tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
-
 commenting = false
 scan = (line, linenumber, tokens) ->
     return if not line
+    emit = (kind, lexeme) ->
+        tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
 
     [start, pos] = [0, 0]
 
-    while true
+    loop
         if not commenting
             # Skip spaces
             pos++ while /\s/.test line[pos]
@@ -62,7 +61,7 @@ scan = (line, linenumber, tokens) ->
             break if pos >= line.length
 
             # Multi-line comment
-            if line.substring pos, pos + 3 is "###"
+            if line.substring(pos, pos + 3) is '###'
                 commenting = true
                 break
 
@@ -71,12 +70,18 @@ scan = (line, linenumber, tokens) ->
 
             # Two-character tokens
             if /// <=|==|>=|!=           # Relative checkers
-                  |+=|-=|\/=|\*=|++|--  # Modify and reassign
+                  |\+=|-=|\/=|\*=|\+\+|--  # Modify and reassign
                   |->                   # Function arrow
                   |<<|>>                # Bitshift
                   |\|\||&&              # And & Or
                ///.test line.substring(pos, pos+2)
                 emit line.substring pos, pos+2
+                pos += 2
+
+            else if /\"/.test line[pos]
+                pos++ while not /[^\\]\"/.test(line.substring pos, pos + 2)
+                emit 'STRLIT', line.substring start + 1, pos + 1
+
                 pos += 2
 
             # One-character tokens
@@ -96,14 +101,14 @@ scan = (line, linenumber, tokens) ->
                     pos++ while DIGIT.test line[pos]
                     emit 'FLOATLIT', line.substring start, pos
                 else if line[pos] is '.'
-                    error "Bad float format: #{line[pos]}", {line: linenumber, col: pos}
+                    error line, "Bad float format: #{line[pos]}", {line: linenumber, col: pos}
                 else
                     emit 'INTLIT', line.substring start, pos
 
             else
-                error "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
+                error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
         else
-            pos++ while line.substring pos, pos + 3 is not "###"
+            pos++ while line.substring pos, pos + 3 is not '###'
             break if pos >= line.length
             commenting = false
