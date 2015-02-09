@@ -43,6 +43,11 @@ module.exports = (filename, callback) ->
         tokens.push {kind: 'EOF', lexeme: 'EOF'}
         callback tokens
 
+module.exports.scanString = (str) ->
+    tokens = []
+    scan str, 0, tokens
+    return tokens
+
 commenting = false
 scan = (line, linenumber, tokens) ->
     return if not line
@@ -109,6 +114,6 @@ scan = (line, linenumber, tokens) ->
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
         else
-            pos++ while line.substring pos, pos + 3 is not '###'
+            pos++ while line.substring(pos, pos + 3) is not '###'
             break if pos >= line.length
             commenting = false
