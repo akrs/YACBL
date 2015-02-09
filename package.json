@@ -8,7 +8,10 @@
     },
 
     "dependencies": {
-        "coffee-script": "latest"
+        "coffee-script": "latest",
+        "byline": "latest",
+        "xregexp": "latest",
+        "yargs": "latest"
     },
     "devDependencies": {
         "mocha": "latest",
