@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="yacbl-logo.png" alt="YACBL Logo"/>
+  <img src="yacbl-logo.jpg" alt="YACBL Logo"/>
 </p>
 ==============
 # YACBL [![Build Status](https://travis-ci.org/akrs/YACBL.svg?branch=master)](https://travis-ci.org/akrs/YACBL) - Yet Another Curly Braced Language
