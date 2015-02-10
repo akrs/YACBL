@@ -45,7 +45,7 @@ module.exports = (filename, callback) ->
 
 module.exports.scanString = (str) ->
     tokens = []
-    scan str, 0, tokens
+    scan str, 1, tokens
     return tokens
 
 commenting = false
@@ -68,29 +68,30 @@ scan = (line, linenumber, tokens) ->
             # Multi-line comment
             if line.substring(pos, pos + 3) is '###'
                 commenting = true
-                break
+                pos += 3
+                continue
 
             # Comment
             break if line[pos] is '#'
 
             # Two-character tokens
-            if /// <=|==|>=|!=           # Relative checkers
-                  |\+=|-=|\/=|\*=|\+\+|--  # Modify and reassign
-                  |->                   # Function arrow
-                  |<<|>>                # Bitshift
-                  |\|\||&&              # And & Or
+            if ///:=                        # Assignment
+                  |<=|==|>=|!=              # Relative checkers
+                  |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
+                  |->                       # Function arrow
+                  |<<|>>                    # Bitshift
+                  |\|\||&&                  # And & Or
                ///.test line.substring(pos, pos+2)
                 emit line.substring pos, pos+2
                 pos += 2
 
             else if /\"/.test line[pos]
-                pos++ while not /[^\\]\"/.test(line.substring pos, pos + 2)
-                emit 'STRLIT', line.substring start + 1, pos + 1
-
+                pos++ until /[^\\]\"/.test(line.substring pos, pos + 2)
+                emit 'STRLIT', line.substring ++start, pos + 1
                 pos += 2
 
             # One-character tokens
-            else if /[+\-*\/(),:=<>\{\}\^&\|!]/.test line[pos]
+            else if /[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9])/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
 
             # Reserved words or identifiers
@@ -100,9 +101,9 @@ scan = (line, linenumber, tokens) ->
                 emit (if KEYWORDS.test word then word else 'ID'), word
 
             # Numeric literals
-            else if DIGIT.test line[pos]
+            else if DIGIT.test(line[pos]) or /\./.test line[pos]
                 pos++ while DIGIT.test line[pos]
-                if line[pos] is '.' and DIGIT.test line[pos + 1]
+                if line[pos] is '.' and DIGIT.test line[++pos]
                     pos++ while DIGIT.test line[pos]
                     emit 'FLOATLIT', line.substring start, pos
                 else if line[pos] is '.'
@@ -114,6 +115,9 @@ scan = (line, linenumber, tokens) ->
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
         else
-            pos++ while line.substring(pos, pos + 3) is not '###'
+            until line.substring(pos, pos + 3) is '###'
+                pos++
+                break if pos >= line.length
             break if pos >= line.length
+            pos += 3
             commenting = false

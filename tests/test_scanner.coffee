@@ -19,7 +19,7 @@ describe 'Scanner', ->
             context 'with no zeros', ->
                 tokens = scanLine 'pi : float = 3.1415'
                 it 'should contain the number', ->
-                    expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '3.1415', line: 1, col: 13}
+                    expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '3.1415', line: 1, col: 14}
                 it 'should have five items', ->
                     expect(tokens).to.have.length(5)
                 it 'should contain the variable', ->
@@ -28,7 +28,7 @@ describe 'Scanner', ->
             context 'with leading zero', ->
                 tokens = scanLine 'half : float = 0.5'
                 it 'should contain the number', ->
-                    expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '.5', line: 1, col: 16}
+                    expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '0.5', line: 1, col: 16}
                 it 'should have 5 tokens', ->
                     expect(tokens).to.have.length(5)
                 it 'should contain the variable', ->
@@ -99,7 +99,7 @@ describe 'Scanner', ->
             it 'should have the dot', ->
                 expect(tokens).to.contain {kind: '.', lexeme: '.', line: 1, col: 3}
             it 'should have the property', ->
-                expect(tokens).to.contain {kind: 'ID', lexeme: 'sound', line: 1, col: 4}
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'color', line: 1, col: 4}
 
         context 'object with UTF8 in its name', ->
             tokens = scanLine '犛.聲音 = "咕嚕"' # This translates to yak.sound = grunt
@@ -114,28 +114,32 @@ describe 'Scanner', ->
         context 'single line comments', ->
             tokens = scanLine 'x := 3 # This is a comment'
             it 'should only have the code tokens', ->
-                expect(tokens).to.equal [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
+                expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                          {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                          {kind: 'INTLIT', lexeme: '3', line: 1, col: 6}]
 
         context 'multiline comments', ->
             context 'with no trailing code', ->
-                scan './test_files/scanner_multiline_1.yak', (tokens) ->
-                    it 'should only have the code tokens', ->
-                        expect(tokens).to.equal [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
-                                                 {kind: ':=', lexeme: ':=', line: 1, col: 3},
-                                                 {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
-                                                 {kind: 'ID', lexeme: 'x', line: 5, col: 1},
-                                                 {kind: '=', lexeme: '=', line: 5, col: 3},
-                                                 {kind: 'INTLIT', lexeme: '2', line: 5, col: 5}]
+                it 'should only have the code tokens', (done) ->
+                    scan './tests/test_files/scanner_multiline_1.yak', (tokens) ->
+                        expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
+                                               {kind: ':=', lexeme: ':=', line: 1, col: 3},
+                                               {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
+                                               {kind: 'ID', lexeme: 'x', line: 5, col: 1},
+                                               {kind: '=', lexeme: '=', line: 5, col: 3},
+                                               {kind: 'INTLIT', lexeme: '2', line: 5, col: 5},
+                                               {kind: 'EOF', lexeme: 'EOF'}]
+                        done()
 
             context 'with trailing code', ->
-                scan './test_files/scanner_multiline_2.yak', (tokens) ->
-                    it 'should only have the code tokens', ->
-                        expect(tokens).to.equal [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
-                                                 {kind: ':=', lexeme: ':=', line: 1, col: 3},
-                                                 {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
-                                                 {kind: 'ID', lexeme: 'x', line: 5, col: 1},
-                                                 {kind: '=', lexeme: '=', line: 5, col: 3},
-                                                 {kind: 'INTLIT', lexeme: '2', line: 5, col: 5}]
+                it 'should only have the code tokens', (done) ->
+                    scan './tests/test_files/scanner_multiline_2.yak', (tokens) ->
+                        expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
+                                               {kind: ':=', lexeme: ':=', line: 1, col: 3},
+                                               {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
+                                               {kind: 'ID', lexeme: 'x', line: 2, col: 5},
+                                               {kind: '=', lexeme: '=', line: 2, col: 7},
+                                               {kind: 'INTLIT', lexeme: '2', line: 2, col: 9},
+                                               {kind: 'EOF', lexeme: 'EOF'}]
+                        done()
 
