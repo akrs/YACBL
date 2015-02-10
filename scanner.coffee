@@ -115,9 +115,7 @@ scan = (line, linenumber, tokens) ->
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
         else
-            until line.substring(pos, pos + 3) is '###'
-                pos++
-                break if pos >= line.length
+            pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
             break if pos >= line.length
             pos += 3
             commenting = false
