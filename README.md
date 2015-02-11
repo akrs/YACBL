@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="yacbl-logo.jpg" alt="YACBL Logo"/>
-</p>
+![logo](logos/yacbl-logo.jpg)
 ==============
 # YACBL [![Build Status](https://travis-ci.org/akrs/YACBL.svg?branch=master)](https://travis-ci.org/akrs/YACBL) - Yet Another Curly Braced Language
 YACBL is a statically typed language that bring the syntactical sugar of a scripting language to a less ambiguous static language like Java. Our goal in designing YACBL was to eliminate the ambiguity that can come with a scripting language while maintaining a smooth and flowing syntax. The compiler is written in CoffeeScript and YACBL is compiled into Java.
