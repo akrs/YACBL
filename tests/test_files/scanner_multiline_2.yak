@@ -1,2 +1,2 @@
-x := 1 ### This sets x to one
-### x = 2 # If anyone writes code like this, they're an idiot. And we're ready.
+x := 1### This sets x to one
+###x = 2 # If anyone writes code like this, they're an idiot. And we're ready.

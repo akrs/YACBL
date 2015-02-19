@@ -10,8 +10,8 @@ describe 'Scanner', ->
             tokens = scanLine 'x : int = 38437'
             it 'should contain the number', ->
                 expect(tokens).to.contain {kind: 'INTLIT', lexeme: '38437', line: 1, col: 11}
-            it 'should have 5 items', ->
-                expect(tokens).to.have.length(5)
+            it 'should have 6 tokens', ->
+                expect(tokens).to.have.length(6)
             it 'should contain the variable', ->
                 expect(tokens).to.contain {kind: 'ID', lexeme: 'x', line: 1, col: 1}
 
@@ -20,8 +20,8 @@ describe 'Scanner', ->
                 tokens = scanLine 'pi : float = 3.1415'
                 it 'should contain the number', ->
                     expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '3.1415', line: 1, col: 14}
-                it 'should have five items', ->
-                    expect(tokens).to.have.length(5)
+                it 'should have 6 tokens', ->
+                    expect(tokens).to.have.length(6)
                 it 'should contain the variable', ->
                     expect(tokens).to.contain {kind: 'ID', lexeme: 'pi', line: 1, col: 1}
 
@@ -29,8 +29,8 @@ describe 'Scanner', ->
                 tokens = scanLine 'half : float = 0.5'
                 it 'should contain the number', ->
                     expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '0.5', line: 1, col: 16}
-                it 'should have 5 tokens', ->
-                    expect(tokens).to.have.length(5)
+                it 'should have 6 tokens', ->
+                    expect(tokens).to.have.length(6)
                 it 'should contain the variable', ->
                     expect(tokens).to.contain {kind: 'ID', lexeme: 'half', line: 1, col: 1}
 
@@ -38,16 +38,16 @@ describe 'Scanner', ->
                 tokens = scanLine 'half : float = .5'
                 it 'should contain the number', ->
                     expect(tokens).to.contain {kind: 'FLOATLIT', lexeme: '.5', line: 1, col: 16}
-                it 'should have 5 tokens', ->
-                    expect(tokens).to.have.length(5)
+                it 'should have 6 tokens', ->
+                    expect(tokens).to.have.length(6)
                 it 'should contain the variable', ->
                     expect(tokens).to.contain {kind: 'ID', lexeme: 'half', line: 1, col: 1}
 
     describe 'Finding declarations: ', ->
         context 'declaration with infered type', ->
             tokens = scanLine 'x := 5'
-            it 'should have 3 tokens', ->
-                expect(tokens).to.have.length(3)
+            it 'should have 4 tokens', ->
+                expect(tokens).to.have.length(4)
             it 'should contain the variable', ->
                 expect(tokens).to.contain {kind: 'ID', lexeme: 'x', line: 1, col: 1}
             it 'should contain :=', ->
@@ -55,8 +55,8 @@ describe 'Scanner', ->
 
         context 'declaration with type', ->
             tokens = scanLine 'x : int = 5'
-            it 'should have 5 tokens', ->
-                expect(tokens).to.have.length(5)
+            it 'should have 6 tokens', ->
+                expect(tokens).to.have.length(6)
             it 'should have the variable', ->
                 expect(tokens).to.contain {kind: 'ID', lexeme: 'x', line: 1, col: 1}
             it 'should have the colon', ->
@@ -115,8 +115,9 @@ describe 'Scanner', ->
             tokens = scanLine 'x := 3 # This is a comment'
             it 'should only have the code tokens', ->
                 expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
-                                         {kind: ':=', lexeme: ':=', line: 1, col: 3},
-                                         {kind: 'INTLIT', lexeme: '3', line: 1, col: 6}]
+                                       {kind: ':=', lexeme: ':=', line: 1, col: 3},
+                                       {kind: 'INTLIT', lexeme: '3', line: 1, col: 6},
+                                       {kind: 'EOL', lexeme: 'EOL', line: 1}]
 
         context 'multiline comments', ->
             context 'with no trailing code', ->
@@ -125,9 +126,14 @@ describe 'Scanner', ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 1},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 2},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 3},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 4},
                                                {kind: 'ID', lexeme: 'x', line: 5, col: 1},
                                                {kind: '=', lexeme: '=', line: 5, col: 3},
                                                {kind: 'INTLIT', lexeme: '2', line: 5, col: 5},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 5},
                                                {kind: 'EOF', lexeme: 'EOF'}]
                         done()
 
@@ -137,9 +143,11 @@ describe 'Scanner', ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
-                                               {kind: 'ID', lexeme: 'x', line: 2, col: 5},
-                                               {kind: '=', lexeme: '=', line: 2, col: 7},
-                                               {kind: 'INTLIT', lexeme: '2', line: 2, col: 9},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 1},
+                                               {kind: 'ID', lexeme: 'x', line: 2, col: 4},
+                                               {kind: '=', lexeme: '=', line: 2, col: 6},
+                                               {kind: 'INTLIT', lexeme: '2', line: 2, col: 8},
+                                               {kind: 'EOL', lexeme: 'EOL', line: 2},
                                                {kind: 'EOF', lexeme: 'EOF'}]
                         done()
 

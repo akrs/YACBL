@@ -57,13 +57,23 @@ scan = (line, linenumber, tokens) ->
     [start, pos] = [0, 0]
 
     loop
-        if not commenting
+        if commenting
+            pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
+            if pos >= line.length
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
+            pos += 3
+            commenting = false
+
+        else
             # Skip spaces
             pos++ while /\s/.test line[pos]
             start = pos
 
             # Nothing on the line
-            break if pos >= line.length
+            if pos >= line.length
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
 
             # Multi-line comment
             if line.substring(pos, pos + 3) is '###'
@@ -72,7 +82,9 @@ scan = (line, linenumber, tokens) ->
                 continue
 
             # Comment
-            break if line[pos] is '#'
+            if line[pos] is '#'
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
 
             # Two-character tokens
             if ///:=                        # Assignment
@@ -114,8 +126,4 @@ scan = (line, linenumber, tokens) ->
             else
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
-        else
-            pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
-            break if pos >= line.length
-            pos += 3
-            commenting = false
+
