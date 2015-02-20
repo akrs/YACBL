@@ -88,7 +88,7 @@ while (x < y) {                         while (x < y) {
  * This allows for property access and setting without having to code getters and setters
 
 ```
-Student : Obj {                                                     public class Student {
+class Student : Obj {                                               public class Student {
     protected id : String                                               private String id;
     public age : uint                                                   private int age;
     public name : String where !name.equals("")                         private String name;
@@ -121,17 +121,17 @@ Student : Obj {                                                     public class
 ```
 
 ## Inheritance, interfaces:
-Similar to Java:
+Similar to C#:
 ```
-Iterable : Interface {                          interface Iterable {
+class Iterable : Interface {                    interface Iterable {
     next : func () -> Obj                           public Object next ();
     remove : func () -> void                        public void remove ();
     has_next : func () -> boolean                   public boolean hasNext();
 }                                               }
 
-Linked_List : Iterable {                        public class Linked_List implements Iterable
+class Linked_List : Iterable {                  public class Linked_List implements Iterable
     # Code here                                     // Code here
-    Iter : Iterator {                               private class Iter implements Iterator
+    class Iter : Iterator {                         private class Iter implements Iterator
         Iter : func (l : Linked_List) -> Iter {
             # Code here
         }
@@ -140,4 +140,28 @@ Linked_List : Iterable {                        public class Linked_List impleme
 }
 ```
 
+# Syntaxes
+
+Version 0.1
+
+## Macro
+```
+Program     ::= Declaration+
+Declaration ::= id ':' Func
+             |  ClassDec
+             |  PrimDec
+             |  TupleDec
+PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?
+TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
+ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
+PropDec     ::= ('public' | 'protected' | 'private') (Func | ClassDec | (PrimDec ('where' Exp)?))
+Func        ::= id ':' 'func' '(' (id : type)* ')' '->' ((id ':')? type | void) ((id ':')? type)* Block
+Block       ::= '{' Stmt* '}'
+Stmt        ::= Loop 'EOL'
+             |  Declaration 'EOL'
+             |  Exp 'EOL'
+             |  Assign 'EOL'
+Assign      ::= id (',' id)* '=' Exp (',' Exp)*
+             |  id (+= | -= | /= | *=) Exp
+```
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
