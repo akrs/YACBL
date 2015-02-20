@@ -147,21 +147,21 @@ Version 0.1
 ## Macro
 ```
 Program     ::= Declaration+
-Declaration ::= id ':' Func
+Declaration ::= Func
              |  ClassDec
              |  PrimDec
              |  TupleDec
-PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?
+PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?)
 TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
 ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
 PropDec     ::= ('public' | 'protected' | 'private') (Func | ClassDec | (PrimDec ('where' Exp)?))
-Func        ::= id ':' 'func' '(' (id : type)* ')' '->' ((id ':')? type | void) ((id ':')? type)* Block
+Func        ::= id ':' 'func' '(' (id ':' type (',' id ':' type)*)? ')' '->' (((id ':')? type (',' (id ':')? type)*) | void) Block
 Block       ::= '{' Stmt* '}'
 Stmt        ::= Loop 'EOL'
              |  Declaration 'EOL'
              |  Exp 'EOL'
              |  Assign 'EOL'
 Assign      ::= id (',' id)* '=' Exp (',' Exp)*
-             |  id (+= | -= | /= | *=) Exp
+             |  id ('+=' | '-=' | '/=' | '*=') Exp
 ```
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
