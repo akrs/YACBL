@@ -147,21 +147,42 @@ Version 0.1
 ## Macro
 ```
 Program     ::= Declaration+
-Declaration ::= Func
+Declaration ::= FuncDec
              |  ClassDec
              |  PrimDec
              |  TupleDec
+FuncDec     ::= id ':' 'func' '(' Params? ')' '->' (Returns | void) Block
+Params      ::= id ':' type (',' id ':' type)*
+Returns     ::= (id ':')? type (',' (id ':')? type)*
+ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
 PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?)
 TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
-ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
-PropDec     ::= ('public' | 'protected' | 'private') (Func | ClassDec | (PrimDec ('where' Exp)?))
-Func        ::= id ':' 'func' '(' (id ':' type (',' id ':' type)*)? ')' '->' (((id ':')? type (',' (id ':')? type)*) | void) Block
+PropDec     ::= ('public' | 'protected' | 'private') (FuncDec | ClassDec | (PrimDec ('where' Exp)?))
 Block       ::= '{' Stmt* '}'
 Stmt        ::= Loop 'EOL'
+             |  If 'EOL'
              |  Declaration 'EOL'
-             |  Exp 'EOL'
              |  Assign 'EOL'
+             |  Exp 'EOL'
+Loop        ::= (For | While) Block
+For         ::= 'for' '(' id 'in' (id | Range) ')'
+Range       ::= 'range' '(' intlit ('...' | '..<') intlit ')'
+While       ::= 'while' '(' Exp ')'
+If          ::= if '(' Exp ')' Block
 Assign      ::= id (',' id)* '=' Exp (',' Exp)*
-             |  id ('+=' | '-=' | '/=' | '*=') Exp
+             |  id ('+=' | '-=' | '*=' | '/=' | '%=') Exp
+Exp         ::= Exp1 (('||' | '&&') Exp1)*
+Exp1        ::= Exp2 (('<' | '<=' | '==' | '!=' | '>=' | '>') Exp2)?
+Exp2        ::= Exp3 (('|' | '&' | '^') Exp3)*
+Exp3        ::= Exp4 (('<<' | '>>') Exp4)*
+Exp4        ::= Exp5 (('+' | '-') Exp5)*
+Exp5        ::= Exp6 (('*' | '/' | '%') Exp6)*
+Exp6        ::= ('-' | '!')? Exp7
+Exp7        ::= ('++' | '--')? Exp8
+Exp8        ::= Exp9 ('++' | '--')?
+Exp9        ::= FuncCall | '(' Exp ')' | Literal
+Literal     ::= intlit | boollit | strlit
+FuncCall    ::= id '(' (id (',' id)*)? ')'
 ```
+
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
