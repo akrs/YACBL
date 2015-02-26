@@ -115,6 +115,17 @@ describe 'Scanner', ->
             tokens = scanLine 'x := "Name\\tColor\\tTag number"'
             it 'should have the control characters', ->
                 expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
+        context 'string with interpolation', ->
+            tokens = scanLine 'x := "Yaks $(yak_sound)!"'
+            console.log tokens
+            it 'should have the parts of the string', ->
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'Yaks ', line: 1, col: 7}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '!', line: 1, col: 24}
+            it 'should have the markers', ->
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 12}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
+            it 'should have the interpolation part', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'yak_sound', line: 1, col: 14}
 
     describe 'Finding ranges', ->
         context 'with numbers and ..<', ->
