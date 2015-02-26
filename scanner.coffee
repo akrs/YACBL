@@ -56,6 +56,7 @@ scan = (line, linenumber, tokens) ->
 
     [start, pos] = [0, 0]
     interpolating = false
+    interpolatingDepth = 0
 
     loop
         if commenting
@@ -117,17 +118,22 @@ scan = (line, linenumber, tokens) ->
             # One-character tokens
             else if /^(?:[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
-                if interpolating and line[pos - 1] is ')'
-                    start = pos
-                    interpolating = false
-                    pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
-                    if /\$\(/.test(line.substring pos, pos + 2)
-                        emit 'STRPRT', line.substring start, pos + 1
-                        emit '$('
-                        interpolating = true
-                    else
-                        emit 'STRPRT', line.substring start, pos + 1
-                    pos += 2
+                if interpolating
+                    interpolatingDepth++ if line[pos - 1] is '('
+                    if line[pos - 1] is ')'
+                        if interpolatingDepth isnt 0
+                            interpolatingDepth--
+                        else
+                            start = pos
+                            interpolating = false
+                            pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                            if /\$\(/.test(line.substring pos, pos + 2)
+                                emit 'STRPRT', line.substring start, pos + 1
+                                emit '$('
+                                interpolating = true
+                            else
+                                emit 'STRPRT', line.substring start, pos + 1
+                            pos += 2
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]

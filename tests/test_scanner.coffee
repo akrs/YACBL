@@ -117,7 +117,6 @@ describe 'Scanner', ->
                 expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
         context 'string with interpolation', ->
             tokens = scanLine 'x := "Yaks $(yak_sound)!"'
-            console.log tokens
             it 'should have the parts of the string', ->
                 expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'Yaks ', line: 1, col: 7}
                 expect(tokens).to.contain {kind: 'STRPRT', lexeme: '!', line: 1, col: 24}
@@ -126,6 +125,22 @@ describe 'Scanner', ->
                 expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
             it 'should have the interpolation part', ->
                 expect(tokens).to.contain {kind: 'ID', lexeme: 'yak_sound', line: 1, col: 14}
+        context 'string with complex interpolation', ->
+            tokens = scanLine 'x := "There are $((3 + 2) * 5) yaks"'
+            it 'should have the parts of the string', ->
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'There are ', line: 1, col: 7}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ' yaks', line: 1, col: 31}
+            it 'should have the markers', ->
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 17}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 30}
+            it 'should have the interpolation part', ->
+                expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 19}
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '3', line: 1, col: 20}
+                expect(tokens).to.contain {kind: '+', lexeme: '+', line: 1, col: 22}
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '2', line: 1, col: 24}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 25}
+                expect(tokens).to.contain {kind: '*', lexeme: '*', line: 1, col: 27}
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 29}
 
     describe 'Finding ranges', ->
         context 'with numbers and ..<', ->
