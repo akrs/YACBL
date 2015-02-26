@@ -116,7 +116,7 @@ scan = (line, linenumber, tokens) ->
                 pos += 2
 
             # One-character tokens
-            else if /^(?:[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
+            else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
                 if interpolating
                     interpolatingDepth++ if line[pos - 1] is '('

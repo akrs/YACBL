@@ -196,6 +196,28 @@ describe 'Scanner', ->
             it 'should have the property', ->
                 expect(tokens).to.contain {kind: 'ID', lexeme: '聲音', line: 1, col: 3}
 
+    describe 'Array indexing', ->
+        context 'simple access', ->
+            tokens = scanLine 'arr[1] = other_arr[1]'
+            it 'should have the array ids', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'arr', line: 1, col: 1}
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'other_arr', line: 1, col: 10}
+            it 'should have all the square braces', ->
+                expect(tokens).to.contain {kind: '[', lexeme: '[', line: 1, col: 4}
+                expect(tokens).to.contain {kind: ']', lexeme: ']', line: 1, col: 6}
+                expect(tokens).to.contain {kind: '[', lexeme: '[', line: 1, col: 19}
+                expect(tokens).to.contain {kind: ']', lexeme: ']', line: 1, col: 21}
+        context 'complex access', ->
+            tokens = scanLine 'arr[3 + 5 * 6] = other_arr[some_function()]'
+            it 'should have the array ids', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'arr', line: 1, col: 1}
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'other_arr', line: 1, col: 18}
+            it 'should have all the square braces', ->
+                expect(tokens).to.contain {kind: '[', lexeme: '[', line: 1, col: 4}
+                expect(tokens).to.contain {kind: ']', lexeme: ']', line: 1, col: 14}
+                expect(tokens).to.contain {kind: '[', lexeme: '[', line: 1, col: 27}
+                expect(tokens).to.contain {kind: ']', lexeme: ']', line: 1, col: 43}
+
     describe 'Finding comments', ->
         context 'single line comments', ->
             tokens = scanLine 'x := 3 # This is a comment'
