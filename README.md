@@ -182,7 +182,7 @@ Exp7        ::= ('++' | '--')? Exp8
 Exp8        ::= Exp9 ('++' | '--')?
 Exp9        ::= FuncCall | '(' Exp ')' | Literal
 Literal     ::= intlit | boollit | strlit
-FuncCall    ::= id '(' (id (',' id)*)? ')'
+FuncCall    ::= id '(' (Exp (',' Exp)*)? ')'
 ```
 
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
