@@ -86,8 +86,13 @@ scan = (line, linenumber, tokens) ->
                 tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
                 break
 
+            # Three-character tokens
+            if /\.\.[\.<]/.test line.substring(pos, pos + 3)
+                emit line.substring(pos, pos + 3)
+                pos += 3
+
             # Two-character tokens
-            if ///:=                        # Assignment
+            else if ///:=                        # Assignment
                   |<=|==|>=|!=              # Relative checkers
                   |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
                   |->                       # Function arrow
@@ -103,20 +108,22 @@ scan = (line, linenumber, tokens) ->
                 pos += 2
 
             # One-character tokens
-            else if /[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9])/.test(line.substring(pos, pos + 2))
+            else if /^(?:[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]
                 pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
                 word = line.substring start, pos
-                emit (if KEYWORDS.test word then word else 'ID'), word
+                emit (if KEYWORDS.test(word) then word else 'ID'), word
 
             # Numeric literals
             else if DIGIT.test(line[pos]) or /\./.test line[pos]
                 pos++ while DIGIT.test line[pos]
-                if line[pos] is '.' and DIGIT.test line[++pos]
-                    pos++ while DIGIT.test line[pos]
+                if line[pos] is '.' and DIGIT.test line[pos + 1]
+                    loop
+                        pos++
+                        break unless DIGIT.test line[pos]
                     emit 'FLOATLIT', line.substring start, pos
                 else if line[pos] is '.'
                     error line, "Bad float format: #{line[pos]}", {line: linenumber, col: pos}

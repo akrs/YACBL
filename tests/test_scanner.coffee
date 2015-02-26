@@ -64,6 +64,40 @@ describe 'Scanner', ->
             it 'should have the type', ->
                 expect(tokens).to.contain {kind: 'int', lexeme: 'int', line: 1, col: 5}
 
+    describe 'Finding assignments:', ->
+        context 'literal assigned to variable', ->
+            tokens = scanLine 'y = 5'
+            it 'should have the id', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'y', line: 1, col: 1}
+            it 'should have the =', ->
+                expect(tokens).to.contain {kind: '=', lexeme: '=', line: 1, col: 3}
+            it 'should have the literal', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 5}
+        context 'variable assigned to variable', ->
+            tokens = scanLine 'z = y'
+            it 'should have the first id', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'z', line: 1, col: 1}
+            it 'should have the =', ->
+                expect(tokens).to.contain {kind: '=', lexeme: '=', line: 1, col: 3}
+            it 'should have the second id', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'y', line: 1, col: 5}
+        context 'multiple variables assigned to literals', ->
+            tokens = scanLine 'x, y, z = 1, 2, 3'
+            it 'should have the ids', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'x', line: 1, col: 1}
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'y', line: 1, col: 4}
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'z', line: 1, col: 7}
+            it 'should have the commas between the ids', ->
+                expect(tokens).to.contain {kind: ',', lexeme: ',', line: 1, col: 2}
+                expect(tokens).to.contain {kind: ',', lexeme: ',', line: 1, col: 5}
+            it 'should have the literals', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '1', line: 1, col: 11}
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '2', line: 1, col: 14}
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '3', line: 1, col: 17}
+            it 'should have the commas between the literals', ->
+                expect(tokens).to.contain {kind: ',', lexeme: ',', line: 1, col: 12}
+                expect(tokens).to.contain {kind: ',', lexeme: ',', line: 1, col: 15}
+
     describe 'Finding string literals', ->
         context 'string with no internal quotes or UTF8', ->
             tokens = scanLine 'x := "Yaks grunt!"'
@@ -81,6 +115,32 @@ describe 'Scanner', ->
             tokens = scanLine 'x := "Name\\tColor\\tTag number"'
             it 'should have the control characters', ->
                 expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
+
+    describe 'Finding ranges', ->
+        context 'with numbers and ..<', ->
+            tokens = scanLine 'for (x in 0 ..< 10) {'
+            it 'should find the first bound', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '0', line: 1, col: 11}
+            it 'should find the second bound', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '10', line: 1, col: 17}
+            it 'should find ..<', ->
+                expect(tokens).to.contain {kind: '..<', lexeme: '..<', line: 1, col: 13}
+        context 'with numbers and ...', ->
+            tokens = scanLine 'for (x in 0 ... 10) {'
+            it 'should find the first bound', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '0', line: 1, col: 11}
+            it 'should find the second bound', ->
+                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '10', line: 1, col: 17}
+            it 'should find ...', ->
+                expect(tokens).to.contain {kind: '...', lexeme: '...', line: 1, col: 13}
+        context 'with variables', ->
+            tokens = scanLine 'for (x in y ... z) {'
+            it 'should find the first bound', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'y', line: 1, col: 11}
+            it 'should find the second bound', ->
+                expect(tokens).to.contain {kind: 'ID', lexeme: 'z', line: 1, col: 17}
+            it 'should find ...', ->
+                expect(tokens).to.contain {kind: '...', lexeme: '...', line: 1, col: 13}
 
     describe 'Finding object . properties', ->
         context '\'normal\' object', ->
