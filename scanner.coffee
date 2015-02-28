@@ -8,6 +8,7 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 KEYWORDS = ///^(?:
             Obj
+            |class
             |func
             |int
             |bool
