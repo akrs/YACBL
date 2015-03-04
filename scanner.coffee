@@ -8,6 +8,7 @@ DIGIT = XRegExp '[\\p{Nd}]'
 WORD_CHAR = XRegExp '[\\p{L}\\p{Nd}_]'
 KEYWORDS = ///^(?:
             Obj
+            |class
             |func
             |int
             |bool
@@ -55,15 +56,27 @@ scan = (line, linenumber, tokens) ->
         tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
 
     [start, pos] = [0, 0]
+    interpolating = false
+    interpolatingDepth = 0
 
     loop
-        if not commenting
+        if commenting
+            pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
+            if pos >= line.length
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
+            pos += 3
+            commenting = false
+
+        else
             # Skip spaces
             pos++ while /\s/.test line[pos]
             start = pos
 
             # Nothing on the line
-            break if pos >= line.length
+            if pos >= line.length
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
 
             # Multi-line comment
             if line.substring(pos, pos + 3) is '###'
@@ -72,10 +85,17 @@ scan = (line, linenumber, tokens) ->
                 continue
 
             # Comment
-            break if line[pos] is '#'
+            if line[pos] is '#'
+                tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
+                break
+
+            # Three-character tokens
+            if /\.\.[\.<]/.test line.substring(pos, pos + 3)
+                emit line.substring(pos, pos + 3)
+                pos += 3
 
             # Two-character tokens
-            if ///:=                        # Assignment
+            else if ///:=                        # Assignment
                   |<=|==|>=|!=              # Relative checkers
                   |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
                   |->                       # Function arrow
@@ -86,25 +106,47 @@ scan = (line, linenumber, tokens) ->
                 pos += 2
 
             else if /\"/.test line[pos]
-                pos++ until /[^\\]\"/.test(line.substring pos, pos + 2)
-                emit 'STRLIT', line.substring ++start, pos + 1
+                pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                if /\$\(/.test(line.substring pos, pos + 2)
+                    emit 'STRPRT', line.substring ++start, pos
+                    start = pos
+                    emit '$('
+                    interpolating = true
+                else
+                    emit 'STRLIT', line.substring ++start, pos + 1
                 pos += 2
 
             # One-character tokens
-            else if /[+\-*\/(),:=<>\{\}\^&\|!]|(?:\.[^0-9])/.test(line.substring(pos, pos + 2))
+            else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
+                if interpolating
+                    interpolatingDepth++ if line[pos - 1] is '('
+                    if line[pos - 1] is ')'
+                        if interpolatingDepth isnt 0
+                            interpolatingDepth--
+                        else
+                            start = pos
+                            interpolating = false
+                            pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                            emit 'STRPRT', line.substring start, pos + 1
+                            if /\$\(/.test(line.substring pos, pos + 2)
+                                emit '$('
+                                interpolating = true
+                            pos += 2
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]
                 pos++ while WORD_CHAR.test(line[pos]) and pos < line.length
                 word = line.substring start, pos
-                emit (if KEYWORDS.test word then word else 'ID'), word
+                emit (if KEYWORDS.test(word) then word else 'ID'), word
 
             # Numeric literals
             else if DIGIT.test(line[pos]) or /\./.test line[pos]
                 pos++ while DIGIT.test line[pos]
-                if line[pos] is '.' and DIGIT.test line[++pos]
-                    pos++ while DIGIT.test line[pos]
+                if line[pos] is '.' and DIGIT.test line[pos + 1]
+                    loop
+                        pos++
+                        break unless DIGIT.test line[pos]
                     emit 'FLOATLIT', line.substring start, pos
                 else if line[pos] is '.'
                     error line, "Bad float format: #{line[pos]}", {line: linenumber, col: pos}
@@ -114,8 +156,4 @@ scan = (line, linenumber, tokens) ->
             else
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
-        else
-            pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
-            break if pos >= line.length
-            pos += 3
-            commenting = false
+
