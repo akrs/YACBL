@@ -130,7 +130,98 @@ parseTupleDeclaration = ->
         match ':='
         exps = matchExpList()
 
-at = (kind) ->
+parseExp = ->
+    leftside = parseExp1()
+    while at ['||', '&&']
+        operation = if at '||' then match '||' else match '&&'
+        rightside = parseExp1()
+
+parseExp1 = ->
+    leftside = parseExp2()
+    if at ['<', '<=', '==', '!=', '>=', '>']
+        operation = getExp1Op()
+        rightside = parseExp2()
+
+getExp1Op = ->
+    if at '<' then match '<'
+    else if at '<=' then match '<='
+    else if at '==' then match '=='
+    else if at '!=' then match '!='
+    else if at '>=' then match '>='
+    else match '>'
+
+parseExp2 = ->
+    leftside = parseExp3()
+    while at ['|', '&', '^']
+        operation = getExp2Op()
+        rightside = parseExp3()
+
+getExp2Op = ->
+    if at '|' then match '|'
+    else if at '&' then match '&'
+    else if at '^' then match '^'
+
+parseExp3 = ->
+    leftside = parseExp4()
+    while at ['<<', '>>']
+        operation = if at '<<' then match '<<' else match '>>'
+        rightside = parseExp4()
+
+parseExp4 = ->
+    leftside = parseExp5()
+    while at ['+', '-']
+        operation = if at '+' then match '+' else match '-'
+        rightside = parseExp5()
+
+parseExp5 = ->
+    leftside = parseExp6()
+    while at ['*', '/', '%']
+        operation = getExp5Op()
+        rightside = parseExp6()
+
+getExp5Op = ->
+    if at '*' then match '*'
+    else if at '/' then match '/'
+    else if at '%' then match '%'
+
+parseExp6 = ->
+    if at ['-', '!']
+        operation = if at '-' then match '-' else match '!'
+    rightside = parseExp7()
+
+parseExp7 = ->
+    if at ['++', '--']
+        operation = if at '++' then match '++' else match '--'
+    rightside = parseExp8()
+
+parseExp8 = ->
+    leftside = parseExp9()
+    if at ['++', '--']
+        operation = if at '++' then match '++' else match '--'
+
+parseExp9 = ->
+    if at 'ID' and nextIs '(' 
+        parseFunc()
+    else if at 'ID' 
+        return match 'ID'
+    else if at '('
+        match '('
+        result = parseExp()
+        match ')'
+        return result
+    else 
+        return
+
+parseFuncCall = ->
+    id = match 'ID'
+    match '('
+    params = []
+    while not at ')'
+        params.push parseExp()
+        match ',' if at ','
+    match ')'
+
+at = (kind) -> 
     if tokens.length is 0
         return false
     else if Array.isArray kind
