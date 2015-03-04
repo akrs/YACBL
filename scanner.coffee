@@ -128,12 +128,10 @@ scan = (line, linenumber, tokens) ->
                             start = pos
                             interpolating = false
                             pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                            emit 'STRPRT', line.substring start, pos + 1
                             if /\$\(/.test(line.substring pos, pos + 2)
-                                emit 'STRPRT', line.substring start, pos + 1
                                 emit '$('
                                 interpolating = true
-                            else
-                                emit 'STRPRT', line.substring start, pos + 1
                             pos += 2
 
             # Reserved words or identifiers
