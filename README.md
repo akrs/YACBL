@@ -182,7 +182,7 @@ Exp6        ::= ('-' | '!')? Exp7
 Exp7        ::= ('++' | '--')? Exp8
 Exp8        ::= Exp9 ('++' | '--')?
 Exp9        ::= FuncCall | '(' Exp ')' | Literal
-Literal     ::= intlit | boollit | strlit
+Literal     ::= intlit | floatlit | boollit | strlit 
 FuncCall    ::= id '(' (Exp (',' Exp)*)? ')'
 ```
 
