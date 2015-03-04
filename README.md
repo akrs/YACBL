@@ -159,7 +159,7 @@ PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?)
 TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
              |  id (',' id)* ':=' Exp (',' Exp)*
 PropDec     ::= ('public' | 'protected' | 'private') (FuncDec | ClassDec | (PrimDec ('where' Exp)?)) 'EOL'
-Block       ::= '{' Stmt* '}'
+Block       ::= '{' 'EOL'? Stmt* 'EOL'? '}'
 Stmt        ::= Loop 'EOL'
              |  If 'EOL'
              |  Declaration 'EOL'
@@ -167,7 +167,7 @@ Stmt        ::= Loop 'EOL'
              |  Exp 'EOL'
 Loop        ::= (For | While) Block
 For         ::= 'for' '(' id 'in' (id | Range) ')'
-Range       ::= 'range' '(' intlit ('...' | '..<') intlit ')'
+Range       ::= intlit ('...' | '..<') intlit
 While       ::= 'while' '(' Exp ')'
 If          ::= if '(' Exp ')' Block
 Assign      ::= id (',' id)* '=' Exp (',' Exp)*

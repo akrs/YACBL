@@ -44,10 +44,10 @@ parseClass = ->
     match '{'
     declarations = []
     loop
-        declarations.push parseClassDeclaration()
+        declarations.push parsePropertyDeclaration()
         break if at '}'
 
-parseClassDeclaration = ->
+parsePropertyDeclaration = ->
     if at 'public'
         accessLevel = match 'public'
     else if at 'private'
@@ -125,10 +125,82 @@ parseTupleDeclaration = ->
         types.push matchType()
         if at '='
             match '='
-            exps = matchExpList()
+            exps = parseExpList()
     else
         match ':='
-        exps = matchExpList()
+        exps = parseExpList()
+
+parseExpList = ->
+    exps = []
+    exps.push parseExp()
+    while at ','
+        match ','
+        parseExp()
+    return exps
+
+parseBlock = ->
+    stmts = []
+    match '{'
+    match 'EOL'
+    while not at 'EOL'
+        if at ['ID', 'for', 'while', 'if']
+            stmts.push parseDeclaration() if at 'ID'
+            stmts.push parseIf() if at 'if'
+            stmts.push parseForLoop() if at 'for'
+            stmts.push parseWhileLoop() if at 'while'
+            stmts.push parseAssignment() if at 'if'
+        else
+            stmts.push parseExp()
+        match 'EOL'
+    match '}'
+    match 'EOL'
+
+parseIf = ->
+    match 'if'
+    match '('
+    condition = parseExp()
+    match ')'
+    block = parseBlock()
+
+parseForLoop = ->
+    match 'for'
+    match '('
+    innerId = match 'ID'
+    match 'in'
+    generator = if at 'ID' then match 'ID' else parseRange()
+    block = parseBlock()
+
+parseRange = ->
+    leftSide = parseExp()
+    op = if at '...' then match '...' else match '..<'
+    rightSide = parseExp()
+
+parseWhileLoop = ->
+    match 'while'
+    match '('
+    condition = parseExp()
+    match '('
+    block = parseBlock()
+
+parseAssignment = ->
+    if nextIs ['ID', ',']
+        ids = []
+        ids.push match 'ID'
+        while at ','
+            match ','
+            ids.push match 'ID'
+        match '='
+        exps = []
+        exps.push parseExp()
+        if at ','
+            exps.push parseExp()
+        # return tuple assign thingy
+    else nextIs ['+=', '-=', '*=', '/=', '%=']
+        id = match 'ID'
+        op = match()
+        exp = parseExp()
+        # return modify assign thingy
+
 
 at = (kind) ->
     if tokens.length is 0
