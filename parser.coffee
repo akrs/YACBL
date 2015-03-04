@@ -32,7 +32,6 @@ parseClass = ->
     match('class')
     name = match 'ID'
     match ':'
-    parent = undefined
     if at 'ID'
         parent = match 'ID'
     else if at 'Obj'
@@ -69,6 +68,7 @@ parseClassDeclaration = ->
             if at 'where'
                 match 'where'
                 where = matchExpression()
+    match 'EOL'
 
 parseFunc = ->
     name = match 'ID'
@@ -102,7 +102,35 @@ parseReturns = ->
         returns.push parseType()
     return returns
 
-at = ->
+parsePrimitive = ->
+    name = match 'ID'
+    if at ':'
+        match ':'
+        type = parseType()
+        if at '='
+            match '='
+            exp = parseExp()
+    else
+        match ':='
+        exp = parseExp()
+
+parseTupleDeclaration = ->
+    names = []
+    names.push match 'ID'
+    while at ','
+        match ','
+        names.push match 'ID'
+    if at ':'
+        types = []
+        types.push matchType()
+        if at '='
+            match '='
+            exps = matchExpList()
+    else
+        match ':='
+        exps = matchExpList()
+
+at = (kind) ->
     if tokens.length is 0
         return false
     else if Array.isArray kind
@@ -110,14 +138,10 @@ at = ->
     else
         return kind is tokens[0].kind
 
-matched = [] # push here whenever we pop off of tokens. This allows for restoration of state
-
 match = (kind) ->
     if tokens.length is 0
         error 'Unexpected end of file'
     else if kind is undefined or kind is tokens[0].kind
-        token = tokens.shift()
-        matched.push(token)
-        return token
+        return tokens.shift()
     else
         error "Expected #{kind} but found #{tokens[0].kind}", tokens[0]
