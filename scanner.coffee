@@ -18,6 +18,7 @@ KEYWORDS = ///^(?:
             |for
             |while
             |if
+            |final
             |public
             |private
             |protected

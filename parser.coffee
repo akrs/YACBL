@@ -23,7 +23,7 @@ parseDeclaration = ->
     if at 'class'
         return parseClass()
     else if at ['ID', 'main']
-        if next() is ':'
+        if next() is ':' and tokens[1].kind is 'func'
             return parseFunc()
         else if [':', ':='].some((kind) -> kind is next())
             return parsePrimitive()
@@ -46,32 +46,25 @@ parseClass = ->
         error 'parent', tokens[0]
         return
     match '{'
+    match 'EOL'
     declarations = []
     loop
         declarations.push parsePropertyDeclaration()
         break if at '}'
 
 parsePropertyDeclaration = ->
-    if at 'public'
-        accessLevel = match 'public'
-    else if at 'private'
-        accessLevel = match 'private'
-    else if at 'protected'
-        accessLevel = match 'protected'
+    if at 'final'
+        final = match 'final'
+    if at ['public', 'private', 'protected']
+        accessLevel = match()
     else
         error 'access level', tokens[0]
         return
 
-    if at 'class'
-        declaration = parseClass()
-    else if at 'ID'
-        if next() is 'func'
-            declaration = parseFunc()
-        else if next() [':', ':=']
-            declaration = parsePrimitive()
-            if at 'where'
-                match 'where'
-                where = matchExpression()
+    declaration = parseDeclaration()
+    if at 'where'
+        whereExp = parseExp()
+
     match 'EOL'
 
 parseFunc = ->
