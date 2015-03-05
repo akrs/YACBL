@@ -1,11 +1,11 @@
-squared : func (x:int) -> int {
-	return x * x
+squared : func (x:int) -> (int) {
+    return x * x
 }
 
-#twice : func (f : func (int) -> (int), x : int) -> int {
-#	return f( f(x) )
-#}
+twice : func (f : func (int) -> (int), x : int) -> (int) {
+    return f( f(x) )
+}
 
-main : func ( args: Array(String) ) -> void {
-	print("$(twice(squared, 5))")
+main : func (args: Array(String)) -> (void) {
+    print("$(twice(squared, 5))")
 }

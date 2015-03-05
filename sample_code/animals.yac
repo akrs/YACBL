@@ -2,11 +2,11 @@ class Animal : Obj {
     final public sound : String
     public name : String where !name.equals("")
 
-    Animal : func (name : String) -> Animal {
+    Animal : func (name : String) -> (Animal) {
         this.name = name
     }
 
-    speak : func () -> String {
+    public speak : func () -> (String) {
         return "$(this.name) says $(this.sound)"
     }
 }
@@ -14,7 +14,7 @@ class Animal : Obj {
 class Cow : Animal {
     final public sound := "moooo"
 
-    Cow : func (name : String) -> Cow {
+    Cow : func (name : String) -> (Cow) {
         this.name = name
     }
 }
@@ -22,7 +22,7 @@ class Cow : Animal {
 class Horse : Animal {
     final public sound := "neigh"
 
-    Horse : func (name : String) -> Horse {
+    Horse : func (name : String) -> (Horse) {
         this.name = name
     }
 }
@@ -30,12 +30,12 @@ class Horse : Animal {
 class Sheep : Animal {
     final public sound := "baaaa"
 
-    Sheep : func (name : String) -> Sheep {
+    Sheep : func (name : String) -> (Sheep) {
         this.name = name
     }
 }
 
-main : func (args : Array(String)) -> void {
+main : func (args : Array(String)) -> (void) {
     h := Horse("CJ")
     print(h.speak())
 

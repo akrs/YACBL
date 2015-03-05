@@ -22,6 +22,7 @@ KEYWORDS = ///^(?:
             |public
             |private
             |protected
+            |where
             |void
             |null
             |in
@@ -126,12 +127,16 @@ scan = (line, linenumber, tokens) ->
                         else
                             start = pos
                             interpolating = false
-                            pos++ until /^"|[^\\]\"|\$\(/.test(line.substring pos, pos + 2) # Do not like this
-                            emit 'STRPRT', line.substring start, pos + 1
+                            console.log 'done interpolating'
+                            pos++ until /^(?:"|[^\\]\"|\$\()/.test(line.substring pos, pos + 2) # Do not like this
+                            console.log line.substring pos, pos + 2
+                            emit 'STRPRT', line.substring start, pos
                             if /\$\(/.test(line.substring pos, pos + 2)
                                 emit '$('
                                 interpolating = true
-                            pos += 2
+                                pos++
+                            pos++
+                            console.log line[pos]
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]

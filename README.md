@@ -35,7 +35,7 @@ collatz : func (x : uint) -> uint =             public static int collatz (int x
 Multiple return values, no problem.
 ```
 # YACBL
-divmod : func (dividend : int, divisor : int) -> quotient : int, remainder : uint
+divmod : func (dividend : int, divisor : int) -> (int, uint)
 
 //Java
 public static int[] divmod (int dividend, int divisor)
@@ -59,7 +59,7 @@ if (x) {                                if (x) {
 # Loops
 For loops have special syntactic sugar
 ```
-for (x in 0...100) {                    for (int i = 0; i < 100; i++) {
+for (x in 0 ... 100) {                    for (int i = 0; i < 100; i++) {
     # code here                            // code here
 }                                       }
 ```
@@ -93,7 +93,7 @@ class Student : Obj {                                               public class
     public age : uint                                                   private int age;
     public name : String where !name.equals("")                         private String name;
 
-    public Student : func (id : String, age : uint, name : String) {    public Student (String id, int age, String name) {
+    public Student : func (id : String, age : uint, name : String) -> (Student) {    public Student (String id, int age, String name) {
         # Constructor code                                                  // Constructor code
     }                                                                   }
 
@@ -203,9 +203,11 @@ Exp5        ::= Exp6 (multop Exp6)*
 Exp6        ::= negop? Exp7
 Exp7        ::= incdecop? Exp8
 Exp8        ::= Exp9 incdecop?
-Exp9        ::= FuncCall | '(' Exp ')' | Literal
+Exp9        ::= Exp10 ('.' Exp10)?
+Exp10       ::= FuncCall | '(' Exp ')' | Literal | ArrayAccess
 Literal     ::= intlit | floatlit | boollit | strlit | StrPrt
 FuncCall    ::= id '(' (Exp (',' Exp)*)? ')'
+ArrayAccess ::= id '[' Exp ']'
 StrPrt      ::= '"'(['.' ^'"' '\"']* '$(' Exp ')' ['.' ^'"' '\"']*)+'"'
 ```
 

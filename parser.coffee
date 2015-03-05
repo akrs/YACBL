@@ -23,7 +23,7 @@ parseDeclaration = ->
     if at 'class'
         return parseClass()
     else if at ['ID', 'main']
-        if next() is ':' and tokens[1].kind is 'func'
+        if next() is ':' and tokens[2].kind is 'func'
             return parseFunc()
         else if [':', ':='].some((kind) -> kind is next())
             return parsePrimitive()
@@ -51,26 +51,22 @@ parseClass = ->
     loop
         declarations.push parsePropertyDeclaration()
         break if at '}'
+    match '}'
 
 parsePropertyDeclaration = ->
     if at 'final'
         final = match 'final'
     if at ['public', 'private', 'protected']
         accessLevel = match()
-    else
-        error 'access level', tokens[0]
-        return
 
     declaration = parseDeclaration()
     if at 'where'
+        match 'where'
         whereExp = parseExp()
 
     match 'EOL'
 
 parseFunc = ->
-    # if at 'main'
-    #     name = match 'main'
-    # else
     console.log 'parseFunc'
     name = match 'ID'
     match ':'
@@ -79,7 +75,9 @@ parseFunc = ->
     params = parseParameters()
     match ')'
     match '->'
+    match '('
     returns = parseReturns()
+    match ')'
     block = parseFuncBlock()
 
 parseParameters = ->
@@ -98,8 +96,8 @@ parseReturns = ->
     if at 'void'
         console.log 'done parsing returns'
         return match 'void'
-    until at '{'
-        if at 'ID'
+    until at ')'
+        if at 'ID' and next() is ':'
             match 'ID'
             match ':'
         returns.push parseType()
@@ -177,7 +175,9 @@ parseBlock = ->
     stmts = []
     match '{'
     match 'EOL'
-    while not at ['EOL', '}']
+    while not at '}'
+        match 'EOL' while at 'EOL'
+        break if at '}'
         stmts.push parseStatment()
         match 'EOL'
     match '}'
@@ -190,6 +190,7 @@ parseFuncBlock = ->
     match 'EOL'
     while not at ['}', 'return']
         match 'EOL' while at 'EOL'
+        break if at '}'
         stmts.push parseStatment()
         match 'EOL'
     if at 'return'
@@ -231,6 +232,7 @@ parseForLoop = ->
     innerId = match 'ID'
     match 'in'
     generator = if at 'ID' then match 'ID' else parseRange()
+    match ')'
     block = parseBlock()
 
 parseRange = ->
@@ -344,16 +346,39 @@ parseExp8 = ->
         operation = if at '++' then match '++' else match '--'
 
 parseExp9 = ->
+    leftside = parseExp10()
+    if at '.'
+        match '.'
+        rightside = parseExp10()
+        # dot access here
+
+parseExp10 = ->
     console.log "parse exp9"
     console.log "at #{JSON.stringify tokens[0]} and next is #{JSON.stringify tokens[1]}"
-    if at('ID') and next() is '('
-        console.log 'parsing func call'
-        parseFuncCall()
+    if at('ID')
+        if next() is '('
+            console.log 'parsing func call'
+            parseFuncCall()
+        else if next() is '['
+            parseArrayAccess()
+        else
+            return match 'ID'
     else if at '('
         match '('
         result = parseExp()
         match ')'
         return result
+    else if at 'STRPRT'
+        console.log 'matching strprt'
+        strprt = []
+        strprt.push match 'STRPRT'
+        while at '$('
+            match '$('
+            strprt.push parseExp()
+            match ')'
+            strprt.push match 'STRPRT'
+        # make strprt thingy
+        console.log 'done with strprt'
     else
         return match()
 
@@ -365,6 +390,12 @@ parseFuncCall = ->
         params.push parseExp()
         match ',' if at ','
     match ')'
+
+parseArrayAccess = ->
+    id = match 'ID'
+    match '['
+    exp = parseExp()
+    match ']'
 
 at = (kind) ->
     if tokens.length is 0
