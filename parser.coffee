@@ -19,11 +19,11 @@ parseDeclaration = ->
     if at 'class'
         return parseClass()
     else if at 'ID'
-        if nextIs 'func'
+        if next() is 'func'
             return parseFunc()
-        else if nextIs [':', ':=']
+        else if next() [':', ':=']
             return parsePrimitive()
-        else if nextIs ','
+        else if next() is ','
             return parseTuple()
     else
         error "Declaration expected", tokens[0]
@@ -61,9 +61,9 @@ parsePropertyDeclaration = ->
     if at 'class'
         declaration = parseClass()
     else if at 'ID'
-        if nextIs 'func'
+        if next() is 'func'
             declaration = parseFunc()
-        else if nextIs [':', ':=']
+        else if next() [':', ':=']
             declaration = parsePrimitive()
             if at 'where'
                 match 'where'
@@ -183,9 +183,10 @@ parseWhileLoop = ->
     block = parseBlock()
 
 parseAssignment = ->
-    if nextIs ['ID', ',']
+    id = match 'ID'
+    if next() is ','
         ids = []
-        ids.push match 'ID'
+        ids.push id
         while at ','
             match ','
             ids.push match 'ID'
@@ -195,8 +196,7 @@ parseAssignment = ->
         if at ','
             exps.push parseExp()
         # return tuple assign thingy
-    else nextIs ['+=', '-=', '*=', '/=', '%=']
-        id = match 'ID'
+    else if at ['+=', '-=', '*=', '/=', '%=']
         op = match()
         exp = parseExp()
         # return modify assign thingy
@@ -272,16 +272,16 @@ parseExp8 = ->
         operation = if at '++' then match '++' else match '--'
 
 parseExp9 = ->
-    if at 'ID' and nextIs '(' 
+    if at 'ID' and next() is '('
         parseFunc()
-    else if at 'ID' 
+    else if at 'ID'
         return match 'ID'
     else if at '('
         match '('
         result = parseExp()
         match ')'
         return result
-    else 
+    else
         return
 
 parseFuncCall = ->
@@ -293,7 +293,7 @@ parseFuncCall = ->
         match ',' if at ','
     match ')'
 
-at = (kind) -> 
+at = (kind) ->
     if tokens.length is 0
         return false
     else if Array.isArray kind
@@ -301,9 +301,14 @@ at = (kind) ->
     else
         return kind is tokens[0].kind
 
+next = ->
+    return tokens[1].kind
+
 match = (kind) ->
     if tokens.length is 0
         error 'Unexpected end of file'
+        return
+    if
     else if kind is undefined or kind is tokens[0].kind
         return tokens.shift()
     else
