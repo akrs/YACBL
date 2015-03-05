@@ -143,6 +143,28 @@ class Linked_List : Iterable {                  public class Linked_List impleme
 # Syntaxes
 
 Version 0.1
+## Micro
+```
+id       ::= letter(wordchar)*
+keywords ::= ['Obj'|'class'|'func'|'int'|'bool'|'float'|'uint'|'
+             tuple'|'for'|'while'|'if'|'public'|'private'|'protected'|'
+             void'|'null'|'main'|'in'|'true'|'false'|'return'|'Interface']
+assignop ::= '+=' | '-=' | '*=' | '/=' | '%='
+boolop   ::= '||' | '&&'
+relop    ::= '<' | '<=' | '==' | '!=' | '>=' | '>'
+bitop    ::= '|' | '&' | '^'
+shiftop  ::= '<<' | '>>'
+addop    ::= '+' | '-'
+multop   ::= '*' | '/' | '%'
+negop    ::= '-' | '!'
+incdecop ::= '++' | '--'
+boollit  ::= 'true' | 'false'
+letter   ::= [\p{L}]
+wordchar ::= [\\p{L}\\p{Nd}_]
+strlit   ::= '"'['.' ^'"' '\"']'"'
+intlit   ::= [\p{Nd}]
+floatlit ::= [\p{Nd}]*.[\p{Nd}]+
+```
 
 ## Macro
 ```
@@ -151,7 +173,7 @@ Declaration ::= FuncDec
              |  ClassDec
              |  PrimDec
              |  TupleDec
-FuncDec     ::= id ':' 'func' '(' Params? ')' '->' (Returns | void) Block
+FuncDec     ::= id ':' 'func' '(' Params? ')' '->' (Returns | 'void') Block
 Params      ::= id ':' type (',' id ':' type)*
 Returns     ::= (id ':')? type (',' (id ':')? type)*
 ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
@@ -169,21 +191,22 @@ Loop        ::= (For | While) Block
 For         ::= 'for' '(' id 'in' (id | Range) ')'
 Range       ::= intlit ('...' | '..<') intlit
 While       ::= 'while' '(' Exp ')'
-If          ::= if '(' Exp ')' Block
+If          ::= 'if' '(' Exp ')' Block
 Assign      ::= id (',' id)* '=' Exp (',' Exp)*
-             |  id ('+=' | '-=' | '*=' | '/=' | '%=') Exp
-Exp         ::= Exp1 (('||' | '&&') Exp1)*
-Exp1        ::= Exp2 (('<' | '<=' | '==' | '!=' | '>=' | '>') Exp2)?
-Exp2        ::= Exp3 (('|' | '&' | '^') Exp3)*
-Exp3        ::= Exp4 (('<<' | '>>') Exp4)*
-Exp4        ::= Exp5 (('+' | '-') Exp5)*
-Exp5        ::= Exp6 (('*' | '/' | '%') Exp6)*
-Exp6        ::= ('-' | '!')? Exp7
-Exp7        ::= ('++' | '--')? Exp8
-Exp8        ::= Exp9 ('++' | '--')?
+             |  id assignop Exp
+Exp         ::= Exp1 (boolop Exp1)*
+Exp1        ::= Exp2 (relop Exp2)?
+Exp2        ::= Exp3 (bitop Exp3)*
+Exp3        ::= Exp4 (shiftop Exp4)*
+Exp4        ::= Exp5 (addop Exp5)*
+Exp5        ::= Exp6 (multop Exp6)*
+Exp6        ::= negop? Exp7
+Exp7        ::= incdecop? Exp8
+Exp8        ::= Exp9 incdecop?
 Exp9        ::= FuncCall | '(' Exp ')' | Literal
-Literal     ::= intlit | floatlit | boollit | strlit 
+Literal     ::= intlit | floatlit | boollit | strlit | StrPrt
 FuncCall    ::= id '(' (Exp (',' Exp)*)? ')'
+StrPrt      ::= '"'(['.' ^'"' '\"']* '$(' Exp ')' ['.' ^'"' '\"']*)+'"'
 ```
 
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
