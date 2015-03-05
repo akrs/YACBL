@@ -146,9 +146,9 @@ Version 0.1
 ## Micro
 ```
 id       ::= letter(wordchar)*
-keywords ::= ['Obj'|'class'|'func'|'int'|'bool'|'float'|'uint'|'
-             tuple'|'for'|'while'|'if'|'public'|'private'|'protected'|'
-             void'|'null'|'main'|'in'|'true'|'false'|'return'|'Interface']
+keywords ::= ['Obj'|'class'|'func'|'int'|'bool'|'float'|'uint'
+             |'tuple'|'for'|'while'|'if'|'public'|'private'|'protected'
+             |'void'|'null'|'main'|'in'|'true'|'false'|'return'|'Interface']
 assignop ::= '+=' | '-=' | '*=' | '/=' | '%='
 boolop   ::= '||' | '&&'
 relop    ::= '<' | '<=' | '==' | '!=' | '>=' | '>'

@@ -2,7 +2,7 @@
 
 argv = require 'yargs'
                 .usage 'yak [-t] [-a] [-i] filename'
-                .boolean ['t','a','i']
+                .boolean ['t','s','a','i']
                 .describe 't', 'show tokens after scanning then stop'
                 .describe 's', 'Verify the syntax and print yes if it is a valid yak file'
                 .describe 'a', 'show abstract syntax tree after parsing then stop'
@@ -21,5 +21,5 @@ scan argv._[0], (tokens) ->
         return
     program = parse tokens
     if argv.s
-        if error.count is 0 then console.log 'yes' else console.log 'no'
+        console.log 'yes' if error.count is 0
         return
