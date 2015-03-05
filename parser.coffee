@@ -4,7 +4,6 @@ tokens = []
 
 module.exports = (scannerOutput) ->
     tokens = scannerOutput
-    console.log "starting"
     program = parseProgram()
     match 'EOF'
     return program
@@ -12,14 +11,12 @@ module.exports = (scannerOutput) ->
 parseProgram = ->
     program = []
     loop
-        console.log "parsing program"
         match 'EOL' while at 'EOL'
         program.push parseDeclaration()
         break if at 'EOF'
     return program
 
 parseDeclaration = ->
-    console.log "parsing declaration"
     if at 'class'
         return parseClass()
     else if at ['ID', 'main']
@@ -67,7 +64,6 @@ parsePropertyDeclaration = ->
     match 'EOL'
 
 parseFunc = ->
-    console.log 'parseFunc'
     name = match 'ID'
     match ':'
     match 'func'
@@ -91,17 +87,14 @@ parseParameters = ->
     return parameters
 
 parseReturns = ->
-    console.log 'parsing returns'
     returns = []
     if at 'void'
-        console.log 'done parsing returns'
         return match 'void'
     until at ')'
         if at 'ID' and next() is ':'
             match 'ID'
             match ':'
         returns.push parseType()
-    console.log 'done parsing returns'
     return returns
 
 parsePrimitive = ->
@@ -117,9 +110,7 @@ parsePrimitive = ->
         exp = parseExp()
 
 parseType = ->
-    console.log 'parsing type'
     if at ['bool','int','uint','float']
-        console.log 'done parsing type'
         return match();
     else if at 'func'
         match 'func'
@@ -145,7 +136,6 @@ parseType = ->
             match ')'
             # return generic
         # return type
-    console.log "done parsing type"
 
 parseTupleDeclaration = ->
     names = []
@@ -185,7 +175,6 @@ parseBlock = ->
 
 parseFuncBlock = ->
     stmts = []
-    console.log 'parseFuncBlock'
     match '{'
     match 'EOL'
     while not at ['}', 'return']
@@ -194,14 +183,12 @@ parseFuncBlock = ->
         stmts.push parseStatment()
         match 'EOL'
     if at 'return'
-        console.log "parsing return"
         returns = parseReturnStatement()
         match 'EOL'
     match '}'
     match 'EOL'
 
 parseStatment = ->
-    console.log 'parsing statement'
     if at ['for', 'while', 'if']
         return parseIf() if at 'if'
         return parseForLoop() if at 'for'
@@ -268,14 +255,12 @@ parseAssignment = ->
 
 
 parseExp = ->
-    console.log "parse exp"
     leftside = parseExp1()
     while at ['||', '&&']
         operation = if at '||' then match '||' else match '&&'
         rightside = parseExp1()
 
 parseExp1 = ->
-    console.log "parse exp1"
     leftside = parseExp2()
     if at ['<', '<=', '==', '!=', '>=', '>']
         operation = getExp1Op()
@@ -290,7 +275,6 @@ getExp1Op = ->
     else match '>'
 
 parseExp2 = ->
-    console.log "parse exp2"
     leftside = parseExp3()
     while at ['|', '&', '^']
         operation = getExp2Op()
@@ -302,21 +286,18 @@ getExp2Op = ->
     else if at '^' then match '^'
 
 parseExp3 = ->
-    console.log "parse exp3"
     leftside = parseExp4()
     while at ['<<', '>>']
         operation = if at '<<' then match '<<' else match '>>'
         rightside = parseExp4()
 
 parseExp4 = ->
-    console.log "parse exp4"
     leftside = parseExp5()
     while at ['+', '-']
         operation = if at '+' then match '+' else match '-'
         rightside = parseExp5()
 
 parseExp5 = ->
-    console.log "parse exp5"
     leftside = parseExp6()
     while at ['*', '/', '%']
         operation = getExp5Op()
@@ -328,19 +309,16 @@ getExp5Op = ->
     else if at '%' then match '%'
 
 parseExp6 = ->
-    console.log "parse exp6"
     if at ['-', '!']
         operation = if at '-' then match '-' else match '!'
     rightside = parseExp7()
 
 parseExp7 = ->
-    console.log "parse exp7"
     if at ['++', '--']
         operation = if at '++' then match '++' else match '--'
     rightside = parseExp8()
 
 parseExp8 = ->
-    console.log "parse exp8"
     leftside = parseExp9()
     if at ['++', '--']
         operation = if at '++' then match '++' else match '--'
@@ -353,11 +331,8 @@ parseExp9 = ->
         # dot access here
 
 parseExp10 = ->
-    console.log "parse exp9"
-    console.log "at #{JSON.stringify tokens[0]} and next is #{JSON.stringify tokens[1]}"
     if at('ID')
         if next() is '('
-            console.log 'parsing func call'
             parseFuncCall()
         else if next() is '['
             parseArrayAccess()
@@ -369,7 +344,6 @@ parseExp10 = ->
         match ')'
         return result
     else if at 'STRPRT'
-        console.log 'matching strprt'
         strprt = []
         strprt.push match 'STRPRT'
         while at '$('
@@ -378,7 +352,6 @@ parseExp10 = ->
             match ')'
             strprt.push match 'STRPRT'
         # make strprt thingy
-        console.log 'done with strprt'
     else
         return match()
 
@@ -413,7 +386,6 @@ match = (kind) ->
         error 'end of file'
         return
     else if kind is undefined or kind is tokens[0].kind
-        console.log "matched: #{JSON.stringify tokens[0]}"
         return tokens.shift()
     else
         error kind, tokens[0]
