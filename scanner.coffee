@@ -1,7 +1,7 @@
 fs = require 'fs'
 byline = require 'byline'
 {XRegExp} = require 'xregexp'
-error = require('./error').scannerError
+error = require './error'
 
 LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
@@ -18,13 +18,12 @@ KEYWORDS = ///^(?:
             |for
             |while
             |if
-            |final
             |public
             |private
             |protected
-            |where
             |void
             |null
+            |main
             |in
             |true
             |false
@@ -59,6 +58,7 @@ scan = (line, linenumber, tokens) ->
     [start, pos] = [0, 0]
     interpolating = false
     interpolatingDepth = 0
+
     loop
         if commenting
             pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
@@ -127,16 +127,12 @@ scan = (line, linenumber, tokens) ->
                         else
                             start = pos
                             interpolating = false
-                            console.log 'done interpolating'
-                            pos++ until /^(?:"|[^\\]\"|\$\()/.test(line.substring pos, pos + 2) # Do not like this
-                            console.log line.substring pos, pos + 2
-                            emit 'STRPRT', line.substring start, pos
+                            pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                            emit 'STRPRT', line.substring start, pos + 1
                             if /\$\(/.test(line.substring pos, pos + 2)
                                 emit '$('
                                 interpolating = true
-                                pos++
-                            pos++
-                            console.log line[pos]
+                            pos += 2
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]

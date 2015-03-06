@@ -35,7 +35,7 @@ collatz : func (x : uint) -> uint =             public static int collatz (int x
 Multiple return values, no problem.
 ```
 # YACBL
-divmod : func (dividend : int, divisor : int) -> (int, uint)
+divmod : func (dividend : int, divisor : int) -> quotient : int, remainder : uint
 
 //Java
 public static int[] divmod (int dividend, int divisor)
@@ -59,7 +59,7 @@ if (x) {                                if (x) {
 # Loops
 For loops have special syntactic sugar
 ```
-for (x in 0 ... 100) {                    for (int i = 0; i < 100; i++) {
+for (x in 0...100) {                    for (int i = 0; i < 100; i++) {
     # code here                            // code here
 }                                       }
 ```
@@ -88,12 +88,12 @@ while (x < y) {                         while (x < y) {
  * This allows for property access and setting without having to code getters and setters
 
 ```
-class Student : Obj {                                               public class Student {
+Student : Obj {                                                     public class Student {
     protected id : String                                               private String id;
     public age : uint                                                   private int age;
     public name : String where !name.equals("")                         private String name;
 
-    public Student : func (id : String, age : uint, name : String) -> (Student) {    public Student (String id, int age, String name) {
+    public Student : func (id : String, age : uint, name : String) {    public Student (String id, int age, String name) {
         # Constructor code                                                  // Constructor code
     }                                                                   }
 
@@ -121,94 +121,23 @@ class Student : Obj {                                               public class
 ```
 
 ## Inheritance, interfaces:
-Similar to C#:
+Similar to Java:
 ```
-class Iterable : Interface {                    interface Iterable {
+Iterable : Interface {                          interface Iterable {
     next : func () -> Obj                           public Object next ();
     remove : func () -> void                        public void remove ();
     has_next : func () -> boolean                   public boolean hasNext();
 }                                               }
 
-class Linked_List : Iterable {                  public class Linked_List implements Iterable
+Linked_List : Iterable {                        public class Linked_List implements Iterable
     # Code here                                     // Code here
-    class Iter : Iterator {                         private class Iter implements Iterator
+    Iter : Iterator {                               private class Iter implements Iterator
         Iter : func (l : Linked_List) -> Iter {
             # Code here
         }
     }
     # Code here
 }
-```
-
-# Syntaxes
-
-Version 0.1
-## Micro
-```
-id       ::= letter(wordchar)*
-keywords ::= ['Obj'|'class'|'func'|'int'|'bool'|'float'|'uint'
-             |'tuple'|'for'|'while'|'if'|'public'|'private'|'protected'
-             |'void'|'null'|'main'|'in'|'true'|'false'|'return'|'Interface']
-assignop ::= '+=' | '-=' | '*=' | '/=' | '%='
-boolop   ::= '||' | '&&'
-relop    ::= '<' | '<=' | '==' | '!=' | '>=' | '>'
-bitop    ::= '|' | '&' | '^'
-shiftop  ::= '<<' | '>>'
-addop    ::= '+' | '-'
-multop   ::= '*' | '/' | '%'
-negop    ::= '-' | '!'
-incdecop ::= '++' | '--'
-boollit  ::= 'true' | 'false'
-letter   ::= [\p{L}]
-wordchar ::= [\\p{L}\\p{Nd}_]
-strlit   ::= '"'['.' ^'"' '\"']'"'
-intlit   ::= [\p{Nd}]
-floatlit ::= [\p{Nd}]*.[\p{Nd}]+
-```
-
-## Macro
-```
-Program     ::= Declaration+
-Declaration ::= FuncDec
-             |  ClassDec
-             |  PrimDec
-             |  TupleDec
-FuncDec     ::= id ':' 'func' '(' Params? ')' '->' (Returns | 'void') Block
-Params      ::= id ':' type (',' id ':' type)*
-Returns     ::= (id ':')? type (',' (id ':')? type)*
-ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
-PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?)
-TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
-             |  id (',' id)* ':=' Exp (',' Exp)*
-PropDec     ::= ('public' | 'protected' | 'private') (FuncDec | ClassDec | (PrimDec ('where' Exp)?)) 'EOL'
-Block       ::= '{' 'EOL'? Stmt* 'EOL'? '}'
-Stmt        ::= Loop 'EOL'
-             |  If 'EOL'
-             |  Declaration 'EOL'
-             |  Assign 'EOL'
-             |  Exp 'EOL'
-Loop        ::= (For | While) Block
-For         ::= 'for' '(' id 'in' (id | Range) ')'
-Range       ::= intlit ('...' | '..<') intlit
-While       ::= 'while' '(' Exp ')'
-If          ::= 'if' '(' Exp ')' Block
-Assign      ::= id (',' id)* '=' Exp (',' Exp)*
-             |  id assignop Exp
-Exp         ::= Exp1 (boolop Exp1)*
-Exp1        ::= Exp2 (relop Exp2)?
-Exp2        ::= Exp3 (bitop Exp3)*
-Exp3        ::= Exp4 (shiftop Exp4)*
-Exp4        ::= Exp5 (addop Exp5)*
-Exp5        ::= Exp6 (multop Exp6)*
-Exp6        ::= negop? Exp7
-Exp7        ::= incdecop? Exp8
-Exp8        ::= Exp9 incdecop?
-Exp9        ::= Exp10 ('.' Exp10)?
-Exp10       ::= FuncCall | '(' Exp ')' | Literal | ArrayAccess
-Literal     ::= intlit | floatlit | boollit | strlit | StrPrt
-FuncCall    ::= id '(' (Exp (',' Exp)*)? ')'
-ArrayAccess ::= id '[' Exp ']'
-StrPrt      ::= '"'(['.' ^'"' '\"']* '$(' Exp ')' ['.' ^'"' '\"']*)+'"'
 ```
 
 More example YACBL programs can be found [here](https://github.com/akrs/YACBL/tree/master/sample_code).
