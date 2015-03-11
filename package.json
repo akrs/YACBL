@@ -19,6 +19,6 @@
     "sinon-chai": "^2.7.0"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register ./tests/test*.coffee"
+    "test": "mocha --compilers coffee:coffee-script/register ./tests/test_*.coffee"
   }
 }

@@ -15,7 +15,7 @@ error.parserError = (kind, token) ->
         console.log "Expected #{kind} found #{token.kind}"
     else
         console.log "Unexpected #{kind}"
-
+    error.count++
 
 error.count = 0;
 

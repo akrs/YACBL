@@ -141,6 +141,20 @@ describe 'Scanner', ->
                 expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 25}
                 expect(tokens).to.contain {kind: '*', lexeme: '*', line: 1, col: 27}
                 expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 29}
+        context 'string with multiple interpolation', ->
+            tokens = scanLine 'print("$(x), $(y), $(z)")'
+            it 'should have the $(s', ->
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 8}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 11}
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 14}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 17}
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 20}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
+            it 'should have the string parts', ->
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 8}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 12}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 18}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 24}
 
     describe 'Finding ranges', ->
         context 'with numbers and ..<', ->
