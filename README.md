@@ -147,7 +147,7 @@ Version 0.1
 ```
 id       ::= letter(wordchar)*
 keywords ::= ['Obj'|'class'|'func'|'int'|'bool'|'float'|'uint'
-             |'tuple'|'for'|'while'|'if'|'public'|'private'|'protected'
+             |'tuple'|'for'|'while'|'if'|'public'|'private'|'protected'|'final'
              |'void'|'null'|'main'|'in'|'true'|'false'|'return'|'Interface']
 assignop ::= '+=' | '-=' | '*=' | '/=' | '%='
 boolop   ::= '||' | '&&'

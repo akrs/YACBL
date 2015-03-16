@@ -249,7 +249,7 @@ describe 'Scanner', ->
         context 'multiline comments', ->
             context 'with no trailing code', ->
                 it 'should only have the code tokens', (done) ->
-                    scan './tests/test_files/scanner_multiline_1.yak', (tokens) ->
+                    scan './tests/test_files/scanner/multiline_1.yak', (tokens) ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
@@ -266,7 +266,7 @@ describe 'Scanner', ->
 
             context 'with trailing code', ->
                 it 'should only have the code tokens', (done) ->
-                    scan './tests/test_files/scanner_multiline_2.yak', (tokens) ->
+                    scan './tests/test_files/scanner/multiline_2.yak', (tokens) ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
