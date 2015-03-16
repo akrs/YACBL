@@ -1,0 +1,3 @@
+y := 5        # Inferred type of int
+int x = 5;
+hello := "Hello world!"

@@ -1,7 +1,7 @@
 fs = require 'fs'
 byline = require 'byline'
 {XRegExp} = require 'xregexp'
-error = require('./error').scannerError
+error = require './error'
 
 LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
@@ -18,13 +18,12 @@ KEYWORDS = ///^(?:
             |for
             |while
             |if
-            |final
             |public
             |private
             |protected
-            |where
             |void
             |null
+            |main
             |in
             |true
             |false
@@ -59,6 +58,7 @@ scan = (line, linenumber, tokens) ->
     [start, pos] = [0, 0]
     interpolating = false
     interpolatingDepth = 0
+
     loop
         if commenting
             pos++ until (line.substring(pos, pos + 3) is '###') or (pos >= line.length)
@@ -132,6 +132,7 @@ scan = (line, linenumber, tokens) ->
                             interpolating = false
                             pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\'
                             emit 'STRPRT', line.substring start, pos
+
                             if /\$\(/.test(line.substring pos, pos + 2)
                                 start = pos
                                 emit '$('
@@ -162,4 +163,3 @@ scan = (line, linenumber, tokens) ->
             else
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
-

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "YACBL",
   "version": "0.0.0",
   "description": "Yet Another Curly Brace Langage",
@@ -21,4 +22,28 @@
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register ./tests/test_*.coffee"
   }
+=======
+    "name": "YACBL",
+    "version": "0.0.0",
+    "description": "Yet Another Curly Brace Langage",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/akrs/YACBL.git"
+    },
+
+    "dependencies": {
+        "coffee-script": "latest",
+        "byline": "latest",
+        "xregexp": "latest",
+        "yargs": "latest"
+    },
+    "devDependencies": {
+        "mocha": "latest",
+        "chai": "latest"
+    },
+
+    "scripts": {
+        "test": "mocha --compilers coffee:coffee-script/register ./tests/test*.coffee"
+    }
+>>>>>>> master
 }
