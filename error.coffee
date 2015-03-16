@@ -9,7 +9,6 @@ error = (line, errstr, position) ->
     console.log "#{errstr}\n#{line}\n#{pointer}"
     error.count++
 
-<<<<<<< HEAD
 error.parserError = (kind, token) ->
     if token?
         console.log "Expected #{kind} but found #{token.kind} at line #{token.line}"
@@ -17,8 +16,6 @@ error.parserError = (kind, token) ->
         console.log "Unexpected #{kind}"
     error.count++
 
-=======
->>>>>>> master
 error.count = 0;
 
 module.exports = error;
