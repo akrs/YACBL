@@ -115,6 +115,11 @@ describe 'Scanner', ->
             tokens = scanLine 'x := "Name\\tColor\\tTag number"'
             it 'should have the control characters', ->
                 expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
+        context 'don\'t want to loose tokens around the string', ->
+            tokens = scanLine 'print("Hello, World!")'
+            it 'should have the tokens', ->
+                expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 6}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 22}
         context 'string with interpolation', ->
             tokens = scanLine 'x := "Yaks $(yak_sound)!"'
             it 'should have the parts of the string', ->

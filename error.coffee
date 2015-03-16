@@ -12,7 +12,7 @@ error.scannerError = (line, errstr, position) ->
 
 error.parserError = (kind, token) ->
     if token?
-        console.log "Expected #{kind} found #{token.kind} at #{token.line}"
+        console.log "Expected #{kind} but found #{token.kind} at line #{token.line}"
     else
         console.log "Unexpected #{kind}"
     error.count++

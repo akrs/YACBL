@@ -114,9 +114,10 @@ scan = (line, linenumber, tokens) ->
                     emit '$('
                     interpolating = true
                     interpolatingDepth = 0
+                    pos += 2
                 else
                     emit 'STRLIT', line.substring ++start, pos
-                pos += 2
+                    pos++
 
             # One-character tokens
             else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^\&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))

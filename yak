@@ -21,5 +21,5 @@ scan argv._[0], (tokens) ->
         return
     program = parse tokens
     if argv.s
-        console.log 'yes' if error.count is 0
+        console.log(if error.count is 0 then 'yes' else 'no')
         return

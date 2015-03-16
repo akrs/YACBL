@@ -10,9 +10,11 @@ module.exports = (scannerOutput) ->
 
 parseProgram = ->
     program = []
+
+    match 'EOL' while at 'EOL'
     loop
-        match 'EOL' while at 'EOL'
         program.push parseDeclaration()
+        match 'EOL' while at 'EOL'
         break if at 'EOF'
     return program
 
@@ -51,10 +53,11 @@ parseClass = ->
     match '}'
 
 parsePropertyDeclaration = ->
-    if at 'final'
-        final = match 'final'
     if at ['public', 'private', 'protected']
         accessLevel = match()
+
+    if at 'final'
+        final = match 'final'
 
     declaration = parseDeclaration()
     if at 'where'
@@ -171,7 +174,6 @@ parseBlock = ->
         stmts.push parseStatment()
         match 'EOL'
     match '}'
-    match 'EOL'
 
 parseFuncBlock = ->
     stmts = []
@@ -186,7 +188,6 @@ parseFuncBlock = ->
         returns = parseReturnStatement()
         match 'EOL'
     match '}'
-    match 'EOL'
 
 parseStatment = ->
     if at ['for', 'while', 'if']
@@ -195,11 +196,10 @@ parseStatment = ->
         return parseWhileLoop() if at 'while'
         return parseAssignment() if at 'if'
     else
-        if at 'ID'
-            if next() is ':' or next() is ':='
-                return parseDeclaration()
-            else if ['=', '+=', '-=', '*=', '/=', '%='].some((kind) -> return kind is next())
-                return parseAssignment()
+        if next() is ':' or next() is ':='
+            return parseDeclaration()
+        else if lineContains ['=', '+=', '-=', '*=', '/=', '%=']
+            return parseAssignment()
         return parseExp()
 
 parseReturnStatement = ->
@@ -235,13 +235,13 @@ parseWhileLoop = ->
     block = parseBlock()
 
 parseAssignment = ->
-    id = match 'ID'
+    id = parseExp9()
     if next() is ','
         ids = []
         ids.push id
         while at ','
             match ','
-            ids.push match 'ID'
+            ids.push parseExp9()
         match '='
         exps = []
         exps.push parseExp()
@@ -252,7 +252,9 @@ parseAssignment = ->
         op = match()
         exp = parseExp()
         # return modify assign thingy
-
+    else
+        op = match '='
+        exp = parseExp()
 
 parseExp = ->
     leftside = parseExp1()
@@ -331,7 +333,7 @@ parseExp9 = ->
         # dot access here
 
 parseExp10 = ->
-    if at('ID')
+    if at 'ID'
         if next() is '('
             parseFuncCall()
         else if next() is '['
@@ -352,8 +354,10 @@ parseExp10 = ->
             match ')'
             strprt.push match 'STRPRT'
         # make strprt thingy
-    else
+    else if at ['INTLIT', 'FLOATLIT', 'STRLIT', 'true', 'false']
         return match()
+    else
+        error 'expression expected', tokens[0]
 
 parseFuncCall = ->
     id = match 'ID'
@@ -374,9 +378,19 @@ at = (kind) ->
     if tokens.length is 0
         return false
     else if Array.isArray kind
-        return kind.some(at)
+        return kind.some at
     else
         return kind is tokens[0].kind
+
+lineContains = (kind) ->
+    if Array.isArray kind
+        return kind.some lineContains
+    else
+        i = 0
+        until tokens[i].kind is 'EOL'
+            return true if kind is tokens[i].kind
+            i++
+        return false
 
 next = ->
     return tokens[1].kind if tokens[1]?
@@ -384,8 +398,10 @@ next = ->
 match = (kind) ->
     if tokens.length is 0
         error 'end of file'
+        exit(0)
         return
     else if kind is undefined or kind is tokens[0].kind
+        # console.log "matched #{kind} with #{JSON.stringify(tokens[0])}"
         return tokens.shift()
     else
         error kind, tokens[0]

@@ -180,7 +180,7 @@ ClassDec    ::= 'class' id ':' (id | 'Obj' | 'Interface') '{' PropDec+ '}'
 PrimDec     ::= id ((':=' Exp) | ':' type ('=' Exp)?)
 TupleDec    ::= id (',' id)* ':' type (',' type)* ('=' Exp (',' Exp)*)?
              |  id (',' id)* ':=' Exp (',' Exp)*
-PropDec     ::= ('public' | 'protected' | 'private') (FuncDec | ClassDec | (PrimDec ('where' Exp)?)) 'EOL'
+PropDec     ::= ('public' | 'protected' | 'private') 'final'? (FuncDec | ClassDec | (PrimDec ('where' Exp)?)) 'EOL'
 Block       ::= '{' 'EOL'? Stmt* 'EOL'? '}'
 Stmt        ::= Loop 'EOL'
              |  If 'EOL'
