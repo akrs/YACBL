@@ -53,7 +53,7 @@ commenting = false
 scan = (line, linenumber, tokens) ->
     return if not line
     emit = (kind, lexeme) ->
-        tokens.push {kind, lexeme: lexeme or kind, line: linenumber, col: start+1}
+        tokens.push {kind, lexeme: (if lexeme? then lexeme else kind), line: linenumber, col: start+1}
 
     [start, pos] = [0, 0]
     interpolating = false
@@ -95,7 +95,7 @@ scan = (line, linenumber, tokens) ->
                 pos += 3
 
             # Two-character tokens
-            else if ///:=                        # Assignment
+            else if ///:=                   # Assignment
                   |<=|==|>=|!=              # Relative checkers
                   |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
                   |->                       # Function arrow
@@ -106,18 +106,21 @@ scan = (line, linenumber, tokens) ->
                 pos += 2
 
             else if /\"/.test line[pos]
-                pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
+                pos++                                                       # I wish there was negative lookbehind
+                pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\'
                 if /\$\(/.test(line.substring pos, pos + 2)
                     emit 'STRPRT', line.substring ++start, pos
                     start = pos
                     emit '$('
                     interpolating = true
+                    interpolatingDepth = 0
+                    pos += 2
                 else
-                    emit 'STRLIT', line.substring ++start, pos + 1
-                pos += 2
+                    emit 'STRLIT', line.substring ++start, pos
+                    pos++
 
             # One-character tokens
-            else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
+            else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^\&\|!]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
                 if interpolating
                     interpolatingDepth++ if line[pos - 1] is '('
@@ -127,12 +130,16 @@ scan = (line, linenumber, tokens) ->
                         else
                             start = pos
                             interpolating = false
-                            pos++ until /[^\\]\"|\$\(/.test(line.substring pos, pos + 2)
-                            emit 'STRPRT', line.substring start, pos + 1
+                            pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\'
+                            emit 'STRPRT', line.substring start, pos
+
                             if /\$\(/.test(line.substring pos, pos + 2)
+                                start = pos
                                 emit '$('
                                 interpolating = true
-                            pos += 2
+                                interpolatingDepth = 0
+                                pos++
+                            pos++
 
             # Reserved words or identifiers
             else if LETTER.test line[pos]
@@ -156,4 +163,3 @@ scan = (line, linenumber, tokens) ->
             else
                 error line, "Illegal character: #{line[pos]}", {line: linenumber, col: pos+1}
                 pos++
-

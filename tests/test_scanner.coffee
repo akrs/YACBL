@@ -115,6 +115,11 @@ describe 'Scanner', ->
             tokens = scanLine 'x := "Name\\tColor\\tTag number"'
             it 'should have the control characters', ->
                 expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
+        context 'don\'t want to loose tokens around the string', ->
+            tokens = scanLine 'print("Hello, World!")'
+            it 'should have the tokens', ->
+                expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 6}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 22}
         context 'string with interpolation', ->
             tokens = scanLine 'x := "Yaks $(yak_sound)!"'
             it 'should have the parts of the string', ->
@@ -141,6 +146,20 @@ describe 'Scanner', ->
                 expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 25}
                 expect(tokens).to.contain {kind: '*', lexeme: '*', line: 1, col: 27}
                 expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 29}
+        context 'string with multiple interpolation', ->
+            tokens = scanLine 'print("$(x), $(y), $(z)")'
+            it 'should have the $(s', ->
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 8}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 11}
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 14}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 17}
+                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 20}
+                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
+            it 'should have the string parts', ->
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 8}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 12}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 18}
+                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 24}
 
     describe 'Finding ranges', ->
         context 'with numbers and ..<', ->
@@ -230,7 +249,7 @@ describe 'Scanner', ->
         context 'multiline comments', ->
             context 'with no trailing code', ->
                 it 'should only have the code tokens', (done) ->
-                    scan './tests/test_files/scanner_multiline_1.yak', (tokens) ->
+                    scan './tests/test_files/scanner/multiline_1.yak', (tokens) ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},
@@ -247,7 +266,7 @@ describe 'Scanner', ->
 
             context 'with trailing code', ->
                 it 'should only have the code tokens', (done) ->
-                    scan './tests/test_files/scanner_multiline_2.yak', (tokens) ->
+                    scan './tests/test_files/scanner/multiline_2.yak', (tokens) ->
                         expect(tokens).to.eql [{kind: 'ID', lexeme: 'x', line: 1, col: 1},
                                                {kind: ':=', lexeme: ':=', line: 1, col: 3},
                                                {kind: 'INTLIT', lexeme: '1', line: 1, col: 6},

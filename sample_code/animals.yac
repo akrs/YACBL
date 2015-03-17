@@ -1,34 +1,34 @@
-Animal : Obj {
-    final public sound : String
+class Animal : Obj {
+    public final sound : String
     public name : String where !name.equals("")
-    
+
     Animal : func (name : String) -> Animal {
         this.name = name
     }
-    
+
     speak : func () -> String {
         return "$(this.name) says $(this.sound)"
     }
 }
 
-Cow : Animal {
-    final public sound := "moooo"
+class Cow : Animal {
+    public final sound := "moooo"
 
     Cow : func (name : String) -> Cow {
         this.name = name
     }
 }
 
-Horse : Animal {
-    final public sound := "neigh"
+class Horse : Animal {
+    public final sound := "neigh"
 
     Horse : func (name : String) -> Horse {
         this.name = name
     }
 }
 
-Sheep : Animal {
-    final public sound := "baaaa"
+class Sheep : Animal {
+    public final sound := "baaaa"
 
     Sheep : func (name : String) -> Sheep {
         this.name = name
