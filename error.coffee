@@ -1,4 +1,6 @@
-error = (line, errstr, position) ->
+error = {}
+
+error.scannerError = (line, errstr, position) ->
     pointer = ""
     if position and position.line
         errstr += " at line: #{position.line}"
@@ -16,6 +18,6 @@ error.parserError = (kind, token) ->
         console.log "Unexpected #{kind}"
     error.count++
 
-error.count = 0;
+error.count = 0
 
-module.exports = error;
+module.exports = error

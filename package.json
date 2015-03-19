@@ -14,9 +14,11 @@
   },
   "devDependencies": {
     "mocha": "latest",
-    "chai": "latest"
+    "chai": "latest",
+    "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register ./tests/test_*.coffee"
+    "test": "mocha --timeout 500 --compilers coffee:coffee-script/register ./tests/test_*.coffee"
   }
 }

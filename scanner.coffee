@@ -1,7 +1,7 @@
 fs = require 'fs'
 byline = require 'byline'
 {XRegExp} = require 'xregexp'
-error = require './error'
+error = require('./error').scannerError
 
 LETTER = XRegExp '[\\p{L}]'
 DIGIT = XRegExp '[\\p{Nd}]'
@@ -75,6 +75,8 @@ scan = (line, linenumber, tokens) ->
 
             # Nothing on the line
             if pos >= line.length
+                if interpolating
+                    error line, 'Unexpected newline', {line: linenumber, col: pos}
                 tokens.push {kind: 'EOL', lexeme: 'EOL', line: linenumber}
                 break
 
@@ -107,7 +109,11 @@ scan = (line, linenumber, tokens) ->
 
             else if /\"/.test line[pos]
                 pos++                                                       # I wish there was negative lookbehind
-                pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\'
+                until (/^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\') or pos > line.length
+                    pos++
+                if pos > line.length
+                    error line, 'Unexpected newline', {line: linenumber, col: pos}
+                    return
                 if /\$\(/.test(line.substring pos, pos + 2)
                     emit 'STRPRT', line.substring ++start, pos
                     start = pos
@@ -130,7 +136,9 @@ scan = (line, linenumber, tokens) ->
                         else
                             start = pos
                             interpolating = false
-                            pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\'
+                            pos++ until /^"|\$\(/.test(line.substring pos, pos + 2) and line[pos - 1] isnt '\\' or pos > line.length
+                            if pos > line.length
+                                error line, 'Unexpected newline', {line: linenumber, col: pos}
                             emit 'STRPRT', line.substring start, pos
 
                             if /\$\(/.test(line.substring pos, pos + 2)
