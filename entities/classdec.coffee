@@ -3,3 +3,5 @@ class ClassDec
     
     toString: ->
         "(Program #{@id} #{@type} #{@propdec.join(' ')})"
+
+module.exports = ClassDec

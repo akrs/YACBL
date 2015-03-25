@@ -5,3 +5,5 @@ class FuncDec
     toString: ->
         "(Program #{@id} #{@params.join(' ')} 
                   #{@return} #{@block})"
+
+module.exports = FuncDec

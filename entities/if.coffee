@@ -3,3 +3,5 @@ class If
 
     toString: ->
         "(#{@exp} #{@block})"
+
+module.exports = If

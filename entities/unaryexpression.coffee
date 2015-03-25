@@ -3,3 +3,5 @@ class UnaryExpression
 
     toString: ->
         "(#{@op.lexeme} #{@operand}"
+
+module.exports = UnaryExpression

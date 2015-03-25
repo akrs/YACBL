@@ -3,3 +3,5 @@ class Range
 
     toString: ->
         "(#{@startIntLit} #{@upToAndIncludes} #{@endIntLit})"
+
+module.exports = Range

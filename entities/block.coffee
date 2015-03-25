@@ -3,3 +3,5 @@ class Block
 
     toString: ->
         "(#{@statements.join(' ')})"
+
+module.exports = Block

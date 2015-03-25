@@ -3,3 +3,5 @@ class IntegerLiteral
 
     toString: -> 
         @value
+
+module.exports = IntegerLiteral

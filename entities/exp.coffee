@@ -3,3 +3,5 @@ class Exp
 
     toString: ->
         "(#{@exp1} #{@boolops} #{@exp1s})"
+
+module.exports = Exp

@@ -3,3 +3,5 @@ class TupleDec
 
     toString: ->
         "(#{@id.join(' ')} #{@type.join(' ')} #{@exp.join(' ')})"
+
+module.exports = TupleDec

@@ -3,3 +3,5 @@ class PrimDec
     
     toString: ->
         "(Program #{@id} #{@type} #{@exp})"
+
+module.exports = PrimDec

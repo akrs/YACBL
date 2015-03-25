@@ -3,3 +3,5 @@ class Assign
 
     toString: ->
         "(#{@ids.join(' ')} #{@exps.join(' ')})"
+
+module.exports = Assign

@@ -3,3 +3,5 @@ class BinaryExpression
 
     toString: ->
         "(#{@op.lexeme} #{@left} #{@op.right}"
+
+module.exports = BinaryExpression

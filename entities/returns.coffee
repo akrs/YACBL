@@ -3,3 +3,5 @@ class Returns
 
     toString: ->
         "(#{@id.join(' ')} #{@type.join(' ')})"
+
+module.exports = Returns

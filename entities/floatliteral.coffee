@@ -3,3 +3,5 @@ class FloatLiteral
 
     toString: -> 
         @value
+
+module.exports = FloatLiteral

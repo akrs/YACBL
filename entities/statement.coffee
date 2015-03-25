@@ -3,3 +3,5 @@ class Statement
 
     toString: ->
         "(#{@loop} #{@if} #{@declaration} #{@assign} #{@exp})"
+
+module.exports = Statement

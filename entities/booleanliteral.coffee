@@ -3,3 +3,5 @@ class BooleanLiteral
 
     toString: ->
         @name
+
+module.exports = BooleanLiteral

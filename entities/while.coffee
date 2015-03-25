@@ -3,3 +3,5 @@ class While
 
     toString: ->
         "(#{@exp})"
+
+module.exports = While

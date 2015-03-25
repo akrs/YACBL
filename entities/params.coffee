@@ -3,3 +3,5 @@ class Params
 
     toString: ->
         "(#{@id.join(' ')} #{@type.join(' ')})"
+
+module.exports = Params

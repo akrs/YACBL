@@ -3,3 +3,5 @@ class Loop
 
     toString: ->
         "(#{@typeOfLoop} #{@block})"
+
+module.exports = Loop

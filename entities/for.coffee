@@ -3,3 +3,5 @@ class For
 
     toString: ->
         "(#{@id} #{@range})"
+
+module.exports = For

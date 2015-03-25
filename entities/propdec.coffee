@@ -3,3 +3,5 @@ class PropDec
 
     toString: ->
         "(#{@type} #{@declaration} #{@exp})"
+
+module.exports = PropDec

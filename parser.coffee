@@ -1,4 +1,14 @@
 error = require('./error').parserError
+program = require('./entities/program')
+class = require('./entities/class')
+func = require('./entities/func')
+primitive = require('./entities/primitive')
+tuple = require('./entities/tuple')
+parameter = require('./entities/parameter')
+return = require('./entities/return')
+type = require('./entities/type')
+generic = require('./entities/generic')
+result = require('./entities/result')
 
 tokens = []
 
