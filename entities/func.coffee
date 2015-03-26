@@ -1,7 +1,9 @@
 class Func
-    constructor: (@declarations) ->
-    
+    constructor: (@name, @params, @returns, @block) ->
+
+    # note, this entity is used by both full funcs and mere func types
     toString: ->
-        "(Func )"
+        "(function #{@name?.lexeme} #{@params.join(' ')}
+                  #{if @returns[0] is 'void' then 'void' else @returns.join(' ')} #{@block?})"
 
 module.exports = Func

@@ -1,7 +1,0 @@
-class Generic
-    constructor: (@declarations) ->
-    
-    toString: ->
-        "(Generic )"
-
-module.exports = Generic

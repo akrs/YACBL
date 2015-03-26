@@ -4,4 +4,4 @@ class Parameter
     toString: ->
         "(#{@name} : #{@type})"
 
-module.exports = Parameter
+module.exports = Params

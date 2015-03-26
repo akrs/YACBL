@@ -12,8 +12,12 @@ error.scannerError = (line, errstr, position) ->
     error.count++
 
 error.parserError = (kind, token) ->
+    if Array.isArray kind
+        s = "Expected one of "
+    else
+        s = "Expected "
     if token?
-        console.log "Expected #{kind} but found #{token.kind} at line #{token.line}"
+        console.log "#{s} #{kind} but found #{token.kind} at line #{token.line}"
     else
         console.log "Unexpected #{kind}"
     error.count++

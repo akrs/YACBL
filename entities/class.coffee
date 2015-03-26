@@ -1,7 +1,7 @@
-class Class
+class ClassDec
     constructor: (@declarations) ->
-    
-    toString: ->
-        "(Class )"
 
-module.exports = Class
+    toString: ->
+        "(ClassDec )"
+
+module.exports = ClassDec

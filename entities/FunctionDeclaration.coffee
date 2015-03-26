@@ -1,8 +1,8 @@
-class FunctionDeclaration
+class func
     constructor: (@name, @params, @returns, @block) ->
 
     toString: ->
-        "(function #{@name.lexeme} #{@params.join(' ')}
+        "(function #{@name?.lexeme} #{@params.join(' ')}
                   #{@returns.join(' ')} #{@block})"
 
-module.exports = FunctionDeclaration
+module.exports = func

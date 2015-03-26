@@ -1,7 +1,7 @@
 class TupleDec
-    constructor: (@id, @type, @exp) ->
+    constructor: (@names, @types, @exps) ->
 
     toString: ->
-        "(#{@id.join(' ')} #{@type.join(' ')} #{@exp.join(' ')})"
+        "(#{@names.join(' ')} #{@type?.join(' ')} #{@exp?.join(' ')})"
 
 module.exports = TupleDec

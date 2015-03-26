@@ -1,7 +1,7 @@
 class Type
-    constructor: (@declarations) ->
-    
+    constructor: (@type) ->
+
     toString: ->
-        "(Type )"
+        "(#{@type.lexeme})"
 
 module.exports = Type

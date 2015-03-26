@@ -1,7 +1,7 @@
 class PropDec
-    constructor: (@type, @declaration, @exp) ->
+    constructor: (@accessLevel, @final, @declaration, @whereExp) ->
 
     toString: ->
-        "(#{@type} #{@declaration} #{@exp})"
+        "(#{@accessLevel} #{if @final? then 'final' else ''} #{@declaration} #{if @whereExp? then @whereExp else ''})"
 
 module.exports = PropDec

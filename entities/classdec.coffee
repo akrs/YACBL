@@ -1,7 +1,7 @@
 class ClassDec
-    constructor: (@id, @type, @propdec) ->
-    
+    constructor: (@name, @parent, @properties) ->
+
     toString: ->
-        "(Program #{@id} #{@type} #{@propdec.join(' ')})"
+        "(Class #{@name.lexeme} parent: #{@parent.lexeme} Properties #{@properties.join(' ')})"
 
 module.exports = ClassDec
