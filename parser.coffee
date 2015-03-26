@@ -1,28 +1,31 @@
 error = require('./error').parserError
-Program = require('./entities/program')
-ClassDec = require('./entities/classdec')
-PropDec = require('./entities/propdec')
-Func = require('./entities/func')
-PrimitiveDeclaration = require('./entities/primitivedeclaration')
-TupleDeclaration = require('./entities/tupledec')
-Block = require('./entities/block')
-ReturnStatement = require('./entities/returnstatement')
-FunctionBlock = require('./entities/functionblock')
-IfStatement = require('./entities/if')
-ForLoop = require('./entities/for')
-BinaryExpression = require('./entities/binaryexpression')
-WhileLoop = require('./entities/while')
-TupleAssignment = require('./entities/tupleassignment')
-Assignment = require('./entities/assign')
-UnaryExpression = require('./entities/unaryexpression')
+
 ArrayAccess = require('./entities/arrayaccess')
-primitive = require('./entities/primitive')
-tuple = require('./entities/tuple')
-Parameter = require('./entities/parameter')
-# return = require('./entities/return')
-Type = require('./entities/type')
-GenericType = require('./entities/generictype')
-result = require('./entities/result')
+Assignment = require './entities/assign'
+BinaryExpression = require './entities/binaryexpression'
+Block = require './entities/block'
+ClassDec = require './entities/classdec'
+ForLoop = require './entities/for'
+Func = require './entities/func'
+FunctionBlock = require './entities/functionblock'
+FunctionCall = require './entities/functioncall'
+GenericType = require './entities/generictype'
+IfStatement = require './entities/if'
+Literal = require './entities/literal'
+Parameter = require './entities/parameter'
+primitive = require './entities/primitive'
+PrimitiveDeclaration = require './entities/primitivedeclaration'
+Program = require './entities/program'
+PropDec = require './entities/propdec'
+result = require './entities/result'
+ReturnStatement = require './entities/returnstatement'
+StringPart = require './entities/stringpart'
+tuple = require './entities/tuple'
+TupleAssignment = require './entities/tupleassignment'
+TupleDeclaration = require './entities/tupledec'
+Type = require './entities/type'
+UnaryExpression = require './entities/unaryexpression'
+WhileLoop = require './entities/while'
 
 tokens = []
 
@@ -79,9 +82,14 @@ parseClass = ->
     return new ClassDec name, parent, properties
 
 parsePropertyDeclaration = ->
-    accessLevel = match ['public', 'private', 'protected']
+    # note, this looks stupid. Why you no requre this?
+    # the problem is, constructors don't have an access level.
+    # gnaw on that.
+    if at ['public', 'private', 'protected']
+        accessLevel = match ['public', 'private', 'protected']
 
     if at 'final'
+        match 'final'
         final = true
     else
         final = false
@@ -124,7 +132,8 @@ parseParameters = ->
 parseReturns = ->
     returns = []
     if at 'void'
-        returns.push 'void'
+        returns.push match 'void'
+        return returns
     until at ')'
         returns.push parseType()
     return returns
@@ -455,6 +464,7 @@ next = ->
     return tokens[1].kind if tokens[1]?
 
 match = (kind) ->
+    # console.log tokens
     if Array.isArray kind
         error kind, tokens[0] if not kind.some at
         return match() for k in kind when at(k)
