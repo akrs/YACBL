@@ -1,6 +1,6 @@
 error = require('./error').parserError
 
-ArrayAccess = require('./entities/arrayaccess')
+ArrayAccess = require './entities/arrayaccess'
 Assignment = require './entities/assign'
 BinaryExpression = require './entities/binaryexpression'
 Block = require './entities/block'
@@ -13,14 +13,11 @@ GenericType = require './entities/generictype'
 IfStatement = require './entities/if'
 Literal = require './entities/literal'
 Parameter = require './entities/parameter'
-primitive = require './entities/primitive'
 PrimitiveDeclaration = require './entities/primitivedeclaration'
 Program = require './entities/program'
 PropDec = require './entities/propdec'
-result = require './entities/result'
 ReturnStatement = require './entities/returnstatement'
 StringPart = require './entities/stringpart'
-tuple = require './entities/tuple'
 TupleAssignment = require './entities/tupleassignment'
 TupleDeclaration = require './entities/tupledec'
 Type = require './entities/type'
