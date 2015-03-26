@@ -1,5 +1,11 @@
-expect = require('chai').expect
-fs = require 'fs'
+chai = require 'chai'
+expect = chai.expect
+sinon = require 'sinon'
+sinonChai = require 'sinon-chai'
+chai.use sinonChai
+
+error = require '../error'
+sinon.stub(error, 'scannerError');
 
 scan = require '../scanner'
 scanLine = scan.scanString
@@ -99,67 +105,83 @@ describe 'Scanner', ->
                 expect(tokens).to.contain {kind: ',', lexeme: ',', line: 1, col: 15}
 
     describe 'Finding string literals', ->
-        context 'string with no internal quotes or UTF8', ->
-            tokens = scanLine 'x := "Yaks grunt!"'
-            it 'should have the string', ->
-                expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Yaks grunt!', line: 1, col: 7}
-        context 'string with internal quotes', ->
-            tokens = scanLine 'x := "Yaks say \\"hrumph\\""'
-            it 'should have the string', ->
-                expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Yaks say \\"hrumph\\"', line: 1, col: 7}
-        context 'string with internal UTF8', ->
-            tokens = scanLine 'x := "Chinese for Yak is 犛"'
-            it 'should have the string', ->
-                expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Chinese for Yak is 犛', line: 1, col: 7}
-        context 'string with control characters', ->
-            tokens = scanLine 'x := "Name\\tColor\\tTag number"'
-            it 'should have the control characters', ->
-                expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
-        context 'don\'t want to loose tokens around the string', ->
-            tokens = scanLine 'print("Hello, World!")'
-            it 'should have the tokens', ->
-                expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 6}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 22}
-        context 'string with interpolation', ->
-            tokens = scanLine 'x := "Yaks $(yak_sound)!"'
-            it 'should have the parts of the string', ->
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'Yaks ', line: 1, col: 7}
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '!', line: 1, col: 24}
-            it 'should have the markers', ->
-                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 12}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
-            it 'should have the interpolation part', ->
-                expect(tokens).to.contain {kind: 'ID', lexeme: 'yak_sound', line: 1, col: 14}
-        context 'string with complex interpolation', ->
-            tokens = scanLine 'x := "There are $((3 + 2) * 5) yaks"'
-            it 'should have the parts of the string', ->
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'There are ', line: 1, col: 7}
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ' yaks', line: 1, col: 31}
-            it 'should have the markers', ->
-                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 17}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 30}
-            it 'should have the interpolation part', ->
-                expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 19}
-                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '3', line: 1, col: 20}
-                expect(tokens).to.contain {kind: '+', lexeme: '+', line: 1, col: 22}
-                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '2', line: 1, col: 24}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 25}
-                expect(tokens).to.contain {kind: '*', lexeme: '*', line: 1, col: 27}
-                expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 29}
-        context 'string with multiple interpolation', ->
-            tokens = scanLine 'print("$(x), $(y), $(z)")'
-            it 'should have the $(s', ->
-                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 8}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 11}
-                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 14}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 17}
-                expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 20}
-                expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
-            it 'should have the string parts', ->
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 8}
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 12}
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 18}
-                expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 24}
+        context 'positive tests', ->
+            context 'string with no internal quotes or UTF8', ->
+                tokens = scanLine 'x := "Yaks grunt!"'
+                it 'should have the string', ->
+                    expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Yaks grunt!', line: 1, col: 7}
+            context 'string with internal quotes', ->
+                tokens = scanLine 'x := "Yaks say \\"hrumph\\""'
+                it 'should have the string', ->
+                    expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Yaks say \\"hrumph\\"', line: 1, col: 7}
+            context 'string with internal UTF8', ->
+                tokens = scanLine 'x := "Chinese for Yak is 犛"'
+                it 'should have the string', ->
+                    expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Chinese for Yak is 犛', line: 1, col: 7}
+            context 'string with control characters', ->
+                tokens = scanLine 'x := "Name\\tColor\\tTag number"'
+                it 'should have the control characters', ->
+                    expect(tokens).to.contain {kind: 'STRLIT', lexeme: 'Name\\tColor\\tTag number', line: 1, col: 7}
+            context 'don\'t want to loose tokens around the string', ->
+                tokens = scanLine 'print("Hello, World!")'
+                it 'should have the tokens', ->
+                    expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 6}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 22}
+            context 'string with interpolation', ->
+                tokens = scanLine 'x := "Yaks $(yak_sound)!"'
+                it 'should have the parts of the string', ->
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'Yaks ', line: 1, col: 7}
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: '!', line: 1, col: 24}
+                it 'should have the markers', ->
+                    expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 12}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
+                it 'should have the interpolation part', ->
+                    expect(tokens).to.contain {kind: 'ID', lexeme: 'yak_sound', line: 1, col: 14}
+            context 'string with complex interpolation', ->
+                tokens = scanLine 'x := "There are $((3 + 2) * 5) yaks"'
+                it 'should have the parts of the string', ->
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: 'There are ', line: 1, col: 7}
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: ' yaks', line: 1, col: 31}
+                it 'should have the markers', ->
+                    expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 17}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 30}
+                it 'should have the interpolation part', ->
+                    expect(tokens).to.contain {kind: '(', lexeme: '(', line: 1, col: 19}
+                    expect(tokens).to.contain {kind: 'INTLIT', lexeme: '3', line: 1, col: 20}
+                    expect(tokens).to.contain {kind: '+', lexeme: '+', line: 1, col: 22}
+                    expect(tokens).to.contain {kind: 'INTLIT', lexeme: '2', line: 1, col: 24}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 25}
+                    expect(tokens).to.contain {kind: '*', lexeme: '*', line: 1, col: 27}
+                    expect(tokens).to.contain {kind: 'INTLIT', lexeme: '5', line: 1, col: 29}
+            context 'string with multiple interpolation', ->
+                tokens = scanLine 'print("$(x), $(y), $(z)")'
+                it 'should have the $(s', ->
+                    expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 8}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 11}
+                    expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 14}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 17}
+                    expect(tokens).to.contain {kind: '$(', lexeme: '$(', line: 1, col: 20}
+                    expect(tokens).to.contain {kind: ')', lexeme: ')', line: 1, col: 23}
+                it 'should have the string parts', ->
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 8}
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 12}
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: ', ', line: 1, col: 18}
+                    expect(tokens).to.contain {kind: 'STRPRT', lexeme: '', line: 1, col: 24}
+        context 'negative tests', ->
+            beforeEach 'reset stub', ->
+                error.scannerError.reset()
+            it 'should error on unclosed "', (done) ->
+                scanLine 'x := "This goes on and on'
+                expect(error.scannerError).to.have.been.called
+                done()
+            it 'should error on an unclosed interpolation', (done) ->
+                scanLine 'x := "This y is $(y'
+                expect(error.scannerError).to.have.been.called
+                done()
+            it 'should error on an unclosed " after interpolation', (done) ->
+                scanLine 'x := "This y is $(y)'
+                expect(error.scannerError).to.have.been.called
+                done()
 
     describe 'Finding ranges', ->
         context 'with numbers and ..<', ->
