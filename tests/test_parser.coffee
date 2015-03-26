@@ -18,7 +18,7 @@ describe 'Parser', ->
             beforeEach 'reset stub', ->
                 error.parserError.reset()
             it 'should parse hello world', ->
-                parse require './test_files/parser/hello_world'
+                parse require('./test_files/parser/hello_world')[..]
                 expect(error.parserError).to.not.have.been.called
             it 'should parse class declarations', ->
                 parse require './test_files/parser/classes'
@@ -46,7 +46,12 @@ describe 'Parser', ->
                         it 'with arithmetic'
 
         context 'parsing simple programs', ->
-            it 'should parse hello world'
+            it 'should parse hello world', ->
+                program = parse require('./test_files/parser/hello_world')[..]
+                expect(program.declarations).to.have.length(1)
+                expect(program.declarations[0].name.lexeme).to.eql('main')
+                expect(program.declarations[0].block.statements[0].id.lexeme).to.eql('print')
+
             it 'should parse triple'
             # other simple programs
 

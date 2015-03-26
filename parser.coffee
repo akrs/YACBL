@@ -101,7 +101,7 @@ parsePropertyDeclaration = ->
     return new PropDec accessLevel, final, declaration, whereExp
 
 parseFunc = ->
-    name = match 'ID'
+    name = match ['ID', 'main']
     match ':'
     match 'func'
     match '('
@@ -234,6 +234,8 @@ parseFuncBlock = ->
     return new FunctionBlock statements, returns
 
 parseStatment = ->
+    console.log "parsing statement"
+    console.log tokens
     if at ['for', 'while', 'if']
         return parseIf() if at 'if'
         return parseForLoop() if at 'for'
@@ -243,7 +245,9 @@ parseStatment = ->
             return parseDeclaration()
         else if lineContains ['=', '+=', '-=', '*=', '/=', '%=']
             return parseAssignment()
-        return parseExp()
+        exp = parseExp()
+        console.log exp
+        return exp
 
 parseReturnStatement = ->
     match 'return'
@@ -384,6 +388,7 @@ parseExp8 = ->
     if at ['++', '--']
         operation = match ['++', '--']
         return new UnaryExpression leftSide, 'postfix', operation
+    return leftSide
 
 parseExp9 = ->
     leftSide = parseExp10()
@@ -391,6 +396,7 @@ parseExp9 = ->
         op = match '.'
         rightSide = parseExp10()
         return new BinaryExpression leftSide, op, rightSide
+    return leftSide
 
 parseExp10 = ->
     # TODO: Ask Toal about this. Want to be able to say something like x()[1] and x[1]()
