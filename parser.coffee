@@ -234,8 +234,6 @@ parseFuncBlock = ->
     return new FunctionBlock statements, returns
 
 parseStatment = ->
-    console.log "parsing statement"
-    console.log tokens
     if at ['for', 'while', 'if']
         return parseIf() if at 'if'
         return parseForLoop() if at 'for'
@@ -245,9 +243,7 @@ parseStatment = ->
             return parseDeclaration()
         else if lineContains ['=', '+=', '-=', '*=', '/=', '%=']
             return parseAssignment()
-        exp = parseExp()
-        console.log exp
-        return exp
+        return parseExp()
 
 parseReturnStatement = ->
     match 'return'
