@@ -1,7 +1,7 @@
 class UnaryExpression
-    constructor: (@op, @operand) ->
+    constructor: (@operand, @preOrPostfix, @op) ->
 
-    toString: ->
-        "(#{@op.lexeme} #{@operand}"
+    toString: ->    #might need refactoring?
+        if @preOrPostfix is 'postfix' then "(#{@operand} #{@op})" else "(#{@op} #{@operand})"
 
 module.exports = UnaryExpression

@@ -1,7 +1,7 @@
 class For
-    constructor: (@id, @range) ->
+    constructor: (@innerId, @generator, @block) ->
 
     toString: ->
-        "(#{@id} #{@range})"
+        "(#{@innerId} #{@generator} #{@block})"
 
 module.exports = For

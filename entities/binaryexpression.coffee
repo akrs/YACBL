@@ -1,7 +1,7 @@
 class BinaryExpression
-    constructor: (@op, @left, @right) ->
+    constructor: (@leftSide, @op, @rightSide) ->
 
     toString: ->
-        "(#{@op.lexeme} #{@left} #{@op.right}"
+        "(#{@leftSide} #{@op} #{@rightSide}"
 
 module.exports = BinaryExpression

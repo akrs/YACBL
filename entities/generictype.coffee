@@ -1,7 +1,7 @@
 class GenericType
-    constructor: (@outerType, @innerType) ->
+    constructor: (@type, @innerType) ->
 
     toString: ->
-        return "#{@outerType} #{@innerType}"
+        return "#{@type} #{@innerType}"
 
 module.exports = GenericType

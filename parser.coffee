@@ -1,12 +1,26 @@
 error = require('./error').parserError
 Program = require('./entities/program')
 ClassDec = require('./entities/classdec')
-func = require('./entities/func')
+PropDec = require('./entities/propdec')
+Func = require('./entities/func')
+PrimitiveDeclaration = require('./entities/primitivedeclaration')
+TupleDeclaration = require('./entities/tupledec')
+Block = require('./entities/block')
+ReturnStatement = require('./entities/returnstatement')
+FunctionBlock = require('./entities/functionblock')
+IfStatement = require('./entities/if')
+ForLoop = require('./entities/for')
+BinaryExpression = require('./entities/binaryexpression')
+WhileLoop = require('./entities/while')
+TupleAssignment = require('./entities/tupleassignment')
+Assignment = require('./entities/assign')
+UnaryExpression = require('./entities/unaryexpression')
 primitive = require('./entities/primitive')
 tuple = require('./entities/tuple')
-parameter = require('./entities/parameter')
+Parameter = require('./entities/parameter')
 # return = require('./entities/return')
-type = require('./entities/type')
+Type = require('./entities/type')
+GenericType = require('./entities/generictype')
 result = require('./entities/result')
 
 tokens = []
@@ -230,7 +244,7 @@ parseReturnStatement = ->
     until at 'EOL'
         exps.push parseExp()
         match ',' if at ','
-    return new RetrunStatement exps
+    return new ReturnStatement exps
 
 parseIf = ->
     match 'if'
@@ -256,7 +270,7 @@ parseRange = ->
     op = if at '...' then match '...' else match '..<'
     rightSide = parseExp()
 
-    return new BinaryOperation leftSide, op, rightSide
+    return new BinaryExpression leftSide, op, rightSide
 
 parseWhileLoop = ->
     match 'while'
@@ -280,7 +294,7 @@ parseAssignment = ->
         while at ','
             match ','
             exps.push parseExp()
-        return new TupleAssignment ids, exps
+        return new TupleAssignment ids, exps     #change id to name?
     else if at ['+=', '-=', '*=', '/=', '%=']
         op = match()
         exp = parseExp()
@@ -295,7 +309,7 @@ parseExp = ->
     while at ['||', '&&']
         operation = if at '||' then match '||' else match '&&'
         rightSide = parseExp1()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp1 = ->
@@ -303,7 +317,7 @@ parseExp1 = ->
     if at ['<', '<=', '==', '!=', '>=', '>']
         operation = match ['<', '<=', '==', '!=', '>=', '>']
         rightSide = parseExp2()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp2 = ->
@@ -311,7 +325,7 @@ parseExp2 = ->
     while at ['|', '&', '^']
         operation = match ['|', '&', '^']
         rightSide = parseExp3()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp3 = ->
@@ -319,7 +333,7 @@ parseExp3 = ->
     while at ['<<', '>>']
         operation = match ['<<', '>>']
         rightSide = parseExp4()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp4 = ->
@@ -327,7 +341,7 @@ parseExp4 = ->
     while at ['+', '-']
         operation = match ['+', '-']
         rightSide = parseExp5()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp5 = ->
@@ -335,7 +349,7 @@ parseExp5 = ->
     while at ['*', '/', '%']
         operation = match ['*', '/', '%']
         rightSide = parseExp6()
-        return new BinaryOperation leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide
     return leftSide
 
 parseExp6 = ->
@@ -344,7 +358,7 @@ parseExp6 = ->
     rightSide = parseExp7()
 
     if operation?
-        return new UnaryOperation rightSide, 'prefix', operation
+        return new UnaryExpression rightSide, 'prefix', operation
     else
         return rightSide
 
@@ -354,7 +368,7 @@ parseExp7 = ->
     rightSide = parseExp8()
 
     if operation?
-        return new UnaryOperation rightSide, 'prefix', operation
+        return new UnaryExpression rightSide, 'prefix', operation
     else
         return rightSide
 
@@ -362,14 +376,14 @@ parseExp8 = ->
     leftSide = parseExp9()
     if at ['++', '--']
         operation = match ['++', '--']
-        return new UnaryOperation leftSide, 'postfix', operation
+        return new UnaryExpression leftSide, 'postfix', operation
 
 parseExp9 = ->
     leftSide = parseExp10()
     if at '.'
         op = match '.'
         rightSide = parseExp10()
-        return new BinaryOperation leftSide, op, rightSide
+        return new BinaryExpression leftSide, op, rightSide
 
 parseExp10 = ->
     # TODO: Ask Toal about this. Want to be able to say something like x()[1] and x[1]()

@@ -1,7 +1,7 @@
 class Assign
-    constructor: (@ids, @exps) ->
+    constructor: (@name, @op, @exp) ->
 
     toString: ->
-        "(#{@ids.join(' ')} #{@exps.join(' ')})"
+        "(#{@name} #{@op} #{@exp})"
 
 module.exports = Assign
