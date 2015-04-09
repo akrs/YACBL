@@ -1,4 +1,4 @@
-main : func (args : Array(String)) -> void {
+main : func (args : Array(String)) -> (void) {
 	for (x in 1 ... 50) {
 		for (y in 1 ..< x) {
 			for (z in 1 ..< y) {
