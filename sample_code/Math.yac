@@ -1,0 +1,40 @@
+class Math : Obj {
+    pow : func (a : int, b : int) -> double {
+        if (a == 0) {
+            return 0
+        } else if (b == 0) {
+            return 1
+        } else if (b == 1) {
+            return a
+        } 
+
+        aMinus : bool = false
+        bMinus : bool = false
+        # we don't support ternary operators yet
+        if (a < 0) {
+            a = true
+        } 
+        if (b < 0) {
+            b = true
+        }
+
+        aAbs : int = absoluteValue(a)
+        bAbs : int = absoluteValue(b)
+
+        currentValue : double
+        if (b & 1) != 0) {
+            currentValue = pow(aAbs, bAbs - 1) * aAbs
+        } else {
+            currentValue = pow(aAbs * aAbs, bAbs / 2)
+        }
+
+        if (bMinus) {
+            currentValue = 1.0 / currentValue
+        }
+        if (aMinus && (b & 1) != 0) {
+            currentValue *= -1
+        }
+
+        return currentValue
+    }
+}

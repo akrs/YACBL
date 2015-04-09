@@ -1,0 +1,13 @@
+isLeapYear : func (year : int) -> bool {
+    return (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+}
+
+main : func (args : Array(String)) -> void {
+    year : int = Integer.parseInt(args[0])
+    isLeap := isLeapYear(year)
+    if (isLeap) {
+        print("$(year) is a leap year.")
+    } else {
+        print("$(year) is NOT a leap year.")
+    }
+}

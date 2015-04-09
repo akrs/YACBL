@@ -1,0 +1,16 @@
+collatz : func (n : int) -> void {
+    print("$(n) ")
+    if (n == 1) {
+        return
+    } else if (n % 2 == 0) {
+        collatz(n / 2)
+    } else {
+        collatz(3 * n + 1)
+    }
+}
+
+main : func (args : Array(String)) -> void {
+    n : int = Integer.parseInt(args[0])
+    collatz(n)
+    System.out.println("Finished!")
+}
