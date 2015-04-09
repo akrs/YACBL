@@ -1,4 +1,4 @@
-fibonacci : func (n : int) -> int  {
+fibonacci : func (n : int) -> (int)  {
     if (n == 0) {
         return 0
     } else if (n == 1) {
@@ -8,7 +8,7 @@ fibonacci : func (n : int) -> int  {
     }
 }
 
-determinePostAbbreviation : func (n : int) -> String {
+determinePostAbbreviation : func (n : int) -> (String) {
     if (n == 1) {
         return "st"
     } else if (n == 2) {
@@ -20,7 +20,7 @@ determinePostAbbreviation : func (n : int) -> String {
     }
 }
 
-main : func (args : Array(String)) -> void {
+main : func (args : Array(String)) -> (void) {
     n : int = Integer.parseInt(args[0])
     if (n < 1) {
         print("You must enter a number greater than or equal to 1!")

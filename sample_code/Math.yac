@@ -1,5 +1,5 @@
 class Math : Obj {
-    pow : func (a : int, b : int) -> double {
+    pow : func (a : int, b : int) -> (double) {
         if (a == 0) {
             return 0
         } else if (b == 0) {
