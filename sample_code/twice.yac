@@ -3,9 +3,9 @@ squared : func (x:int) -> (int) {
 }
 
 twice : func (f : func(int) -> int, x : int) -> (int) {
-	return f( f(x) )
+	return f(f(x))
 }
 
 main : func ( args: Array(String) ) -> (void) {
-	print( $( twice(squared, 5) ) )
+	print("$(twice(squared, 5))")
 }

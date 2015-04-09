@@ -12,5 +12,5 @@ collatz : func (n : int) -> (void) {
 main : func (args : Array(String)) -> (void) {
     n : int = Integer.parseInt(args[0])
     collatz(n)
-    System.out.println("Finished!")
+    print("Finished!")
 }

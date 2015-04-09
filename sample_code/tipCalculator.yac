@@ -5,5 +5,5 @@ calcTip : func (originalCost : float, tipRate : float) -> (float) {
 main : func (args : Array(String)) -> (void) {
     originalCost : float = Float.parseFloat(args[0])
     tipRate := Float.parseFloat(args[1])
-    print($(calcTip(originalCost, tipRate)))
+    print("$(calcTip(originalCost, tipRate))")
 }
