@@ -55,6 +55,15 @@ describe 'Parser', ->
             it 'should parse triple'
             # other simple programs
 
+            # it 'should parse collatz', ->
+            #     program = parse require('./test_files/parser/collatz')[..]
+            #     expect(program.declarations).to.have.length(2)
+
         context 'parsing classes', ->
-            it 'should parse animals'
+            
+                
+            it 'should parse animals', ->
+                program = parse require('./test_files/parser/animals')[..]
+                expect(program.declarations).to.have.length(5)
             # other class stuff
+

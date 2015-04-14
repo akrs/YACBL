@@ -10,7 +10,7 @@ collatz : func (n : int) -> (void) {
 }
 
 main : func (args : Array(String)) -> (void) {
-    n : int = Integer.parseInt(args[0])
+    n : int = convert(args[0], int)
     collatz(n)
     print("Finished!")
 }
