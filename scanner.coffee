@@ -99,7 +99,7 @@ scan = (line, linenumber, tokens) ->
             # Two-character tokens
             else if ///:=                   # Assignment
                   |<=|==|>=|!=              # Relative checkers
-                  |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
+                  |\+=|-=|\/=|\*=|\+\+|--|% # Modify and reassign
                   |->                       # Function arrow
                   |<<|>>                    # Bitshift
                   |\|\||&&                  # And & Or
