@@ -2,16 +2,16 @@ changeMaker : func (n : int) -> (String) {
 	amount : int = n
 	quarters : int = amount / 25
 	amount = amount % 25
-	dimes :  int = amount / 10
+	dimes := amount / 10
 	amount = amount % 10
 	nickels: int = amount / 5
 	amount = amount % 5
-	pennies : int = amount
-
+	pennies := amount
+	
 	return "Your change is $(quarters) quarters, $(dimes) dimes, $(nickels), nickels and $(pennies) pennies."	
 }
 
-main : func (args : Array(String)) -> void {
-	n : int = Integer.parseInt(args[0])
-	print (changeMaker(n))
+main : func (args : Array(String)) -> (void) {
+	n : int = convert(args[0], int)
+	print(changeMaker(n))
 }
