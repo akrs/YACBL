@@ -74,10 +74,7 @@ describe 'Parser', ->
             it 'should parse hello world', ->
                 program = parse require('./test_files/parser/hello_world')[..]
                 expect(program.declarations).to.have.length(1)
-                console.log("hello")
-                console.log(JSON.stringify(program.declarations[0].name))
                 expect(program.declarations[0].id).to.eql(new VarRef { "kind": "main", "lexeme": "main", "line": 1, "col": 1 })
-                console.log(JSON.stringify(program.declarations[0].block.statements[0]))
                 expect(program.declarations[0].block.statements[0].id).to.eql(new VarRef { "kind": "ID", "lexeme": "print", "line": 2, "col": 5 })
 
             it 'should parse triple'
