@@ -1,4 +1,5 @@
 class ArrayAccess
+    # This should be varref, expression
     constructor: (@id, @exp) ->
 
     toString: ->

@@ -1,5 +1,5 @@
 class Func
-    constructor: (@name, @params, @returns, @block) ->
+    constructor: (@id, @params, @returns, @block) ->
 
     # note, this entity is used by both full funcs and mere func types
     toString: ->

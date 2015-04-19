@@ -2,6 +2,6 @@ class FunctionCall
     constructor: (@id, @params) ->
 
     toString: ->
-        return "(#{id.lexeme} (#{params?.join(' ')}))"
+        return "(#{id} (#{params?.join(' ')}))"
 
 module.exports = FunctionCall

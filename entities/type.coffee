@@ -1,7 +1,8 @@
 class Type
-    constructor: (@type) ->
+    constructor: (@typeToken) ->
+        @id = @typeToken.lexeme
 
     toString: ->
-        "(#{@type.lexeme})"
+        "(#{@id})"
 
 module.exports = Type

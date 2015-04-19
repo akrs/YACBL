@@ -9,6 +9,31 @@ sinon.stub(error, 'parserError');
 
 parse = require '../parser'
 
+ArrayAccess = require '../entities/arrayaccess'
+Assignment = require '../entities/assign'
+BinaryExpression = require '../entities/binaryexpression'
+Block = require '../entities/block'
+ClassDec = require '../entities/classdec'
+ForLoop = require '../entities/for'
+Func = require '../entities/func'
+FunctionBlock = require '../entities/functionblock'
+FunctionCall = require '../entities/functioncall'
+GenericType = require '../entities/generictype'
+IfStatement = require '../entities/if'
+Literal = require '../entities/literal'
+Parameter = require '../entities/parameter'
+PrimitiveDeclaration = require '../entities/primitivedeclaration'
+Program = require '../entities/program'
+PropDec = require '../entities/propdec'
+ReturnStatement = require '../entities/returnstatement'
+StringPart = require '../entities/stringpart'
+TupleAssignment = require '../entities/tupleassignment'
+TupleDeclaration = require '../entities/tupledec'
+Type = require '../entities/type'
+UnaryExpression = require '../entities/unaryexpression'
+VarRef = require '../entities/varref'
+WhileLoop = require '../entities/while'
+
 describe 'Parser', ->
     after 'remove stub', ->
         error.parserError.restore()
@@ -49,8 +74,11 @@ describe 'Parser', ->
             it 'should parse hello world', ->
                 program = parse require('./test_files/parser/hello_world')[..]
                 expect(program.declarations).to.have.length(1)
-                expect(program.declarations[0].name.lexeme).to.eql('main')
-                expect(program.declarations[0].block.statements[0].id.lexeme).to.eql('print')
+                console.log("hello")
+                console.log(JSON.stringify(program.declarations[0].name))
+                expect(program.declarations[0].id).to.eql(new VarRef { "kind": "main", "lexeme": "main", "line": 1, "col": 1 })
+                console.log(JSON.stringify(program.declarations[0].block.statements[0]))
+                expect(program.declarations[0].block.statements[0].id).to.eql(new VarRef { "kind": "ID", "lexeme": "print", "line": 2, "col": 5 })
 
             it 'should parse triple'
             # other simple programs
