@@ -52,16 +52,6 @@ describe 'Parser', ->
                 expect(program.declarations[0].name.lexeme).to.eql('main')
                 expect(program.declarations[0].block.statements[0].id.lexeme).to.eql('print')
 
-
-            # it 'should parse collatz', ->
-            #     program = parse require('./test_files/parser/collatz')[..]
-            #     expect(program.declarations).to.have.length(2)
-
         context 'parsing classes', ->
-            
-                
-            it 'should parse animals', ->
-                program = parse require('./test_files/parser/animals')[..]
-                expect(program.declarations).to.have.length(5)
+            it 'should parse animals'
             # other class stuff
-
