@@ -52,8 +52,6 @@ describe 'Parser', ->
                 expect(program.declarations[0].name.lexeme).to.eql('main')
                 expect(program.declarations[0].block.statements[0].id.lexeme).to.eql('print')
 
-            it 'should parse triple'
-            # other simple programs
 
         context 'parsing classes', ->
             it 'should parse animals'
