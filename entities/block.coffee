@@ -7,8 +7,8 @@ class Block
     generator: {
         java: ->
             block = "{\n"
-            @statements.forEach (@statement) ->
-                block += "#{@statement.generator.java()}\n"
+            for statment in @statements
+                block += "#{statement.generator.java()}\n"
             return "#{block}}\n"
     }
 

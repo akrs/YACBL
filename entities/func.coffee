@@ -5,5 +5,12 @@ class Func
     toString: ->
         "(function #{@name?.lexeme} #{@params.join(' ')}
                   #{if @returns[0] is 'void' then 'void' else @returns.join(' ')} #{@block?})"
+    
+    generator: {
+        java: -> 
+            
+    }
 
 module.exports = Func
+
+#TODO this func stuff figure out returns 

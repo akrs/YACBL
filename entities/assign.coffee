@@ -6,6 +6,11 @@ class Assign
     toString: ->
         "(#{@varref} #{@op} #{@exp})"
 
+    generator: {
+        java: ->
+            return "_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
+    }
+
     type: (context) ->
         return undefined
 
@@ -23,11 +28,5 @@ class Assign
                 return false
 
         return true
-
-
-    generator: {
-        java: ->
-            return "#yac_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
-    }
     
 module.exports = Assign

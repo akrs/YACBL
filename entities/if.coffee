@@ -4,4 +4,9 @@ class If
     toString: ->
         "(#{@condition} #{@block})"
 
+    generator: {
+        java: ->
+            "if(#{condition.generator.java()})#{block.generator.java()}"
+    }
+
 module.exports = If
