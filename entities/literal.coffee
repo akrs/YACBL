@@ -2,6 +2,6 @@ class Literal
     constructor: (@val) ->
 
     toString: ->
-        return "#{@val.lexeme}"
+        "#{@val.lexeme}"
 
 module.exports = Literal

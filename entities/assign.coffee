@@ -8,7 +8,7 @@ class Assign
 
     generator: {
         java: ->
-            return "#yac_{@name.generator.java()} #{@op} #{@exp.generator.java()}"
+            return "#yac_{@name.generator.java()} #{@op} #{@exp.generator.java()};"
     }
 
 module.exports = Assign

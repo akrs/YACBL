@@ -2,6 +2,6 @@ class StringPart
     constructor: (@parts) ->
 
     toString: ->
-        return "#{parts.join(' ')}"
+        "#{parts.join(' ')}"
 
 module.exports = StringPart
