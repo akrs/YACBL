@@ -1,0 +1,30 @@
+fibonacci : func (n : int) -> (int)  {
+    if (n == 0) {
+        return 0
+    } else if (n == 1) {
+        return 1
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2)
+    }
+}
+
+determinePostAbbreviation : func (n : int) -> (String) {
+    if (n == 1) {
+        return "st"
+    } else if (n == 2) {
+        return "nd"
+    } else if (n == 3) {
+        return "rd"
+    } else {
+        return "th"
+    }
+}
+
+main : func (args : Array(String)) -> (void) {
+    n : int = Integer.parseInt(args[0])
+    if (n < 1) {
+        print("You must enter a number greater than or equal to 1!")
+    } else {
+        print("The $(n)" + determinePostAbbreviation(n) + " of the Fibonacci sequence is " + fibonacci(n) + ".")
+    } 
+}
