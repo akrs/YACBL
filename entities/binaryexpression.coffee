@@ -13,7 +13,6 @@ class BinaryExpression
             return "{@leftSide.generator.java()} #{@op} #{@rightSide.generator.java()}"
     }
 
-module.exports = BinaryExpression
     typesBothInList: (list, context) ->
         typeMatch = (variable) ->
             return list.some((type) -> variable.type(context) is type)
