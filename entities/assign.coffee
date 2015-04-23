@@ -4,4 +4,7 @@ class Assign
     toString: ->
         "(#{@name} #{@op} #{@exp})"
 
+    type: (context) ->
+        return null
+
 module.exports = Assign
