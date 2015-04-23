@@ -16,7 +16,7 @@ class Func
                 for type, i in @returns
                     returnDeclorations += "public #{type} _#{i};\n"
                 rets = "class _returns_#{@id.lexeme}{\n#{returnDeclorations}}\n _returns_#{@id.lexeme}"
-            return "#{rets} _#{id}(#{@params.join(', '))#{blocks.generator.java()}"
+            return "#{rets} _#{id}(#{@params.join(', ')})#{block.generator.java()}"
 
     }
 
