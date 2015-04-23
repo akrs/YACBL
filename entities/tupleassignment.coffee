@@ -6,7 +6,7 @@ class TupleAssignment
 
     generator: { #TODO, same as tupledec
         java: ->
-            return "(#yac_{@names} #{@exp.generator.java()})"
+            return "(_#{@names} #{@exp.generator.java()})"
     }
 
 module.exports = TupleAssignment

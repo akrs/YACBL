@@ -7,7 +7,7 @@ class StringPart
     generator: {
         java: ->
             stringPart = "(\"\""
-            @parts.forEach (@part) -> 
+            for parts in @part
                stringPart += "+ (#{@parts.generator.java()})"
             return "#{stringPart})"
     }

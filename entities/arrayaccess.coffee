@@ -7,7 +7,7 @@ class ArrayAccess
 
     generator: {
         java: ->
-            return "#yac_{varref.id}[#{@exp.generator.java()}]"
+            return "_#{varref.id}[#{@exp.generator.java()}]"
     }
 
     type: (context) ->

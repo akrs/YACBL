@@ -4,6 +4,11 @@ class Literal
     toString: ->
         "#{@token.lexeme}"
 
+    generator: {
+        java: ->
+            return "(#{@token.lexeme})"
+    }
+
     type: ->
         switch @token.kind
             when 'FLOATLIT'
