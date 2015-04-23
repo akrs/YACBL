@@ -126,6 +126,7 @@ scan = (line, linenumber, tokens) ->
                     pos++
 
             # One-character tokens
+
             else if /^(?:[+\-*\/(),:=<>\[\]\{\}\^\&\|!%]|(?:\.[^0-9]))/.test(line.substring(pos, pos + 2))
                 emit line[pos++]
                 if interpolating

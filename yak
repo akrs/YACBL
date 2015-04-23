@@ -6,7 +6,7 @@ argv = require 'yargs'
                 .describe 't', 'show tokens after scanning then stop'
                 .describe 's', 'Verify the syntax and print yes if it is a valid yak file'
                 .describe 'a', 'show abstract syntax tree after parsing then stop'
-                .describe 'i', 'generate and show the intermediate code then stop'
+                # .describe 'i', 'generate and show the intermediate code then stop'
                 .demand(1)
                 .argv
 
@@ -22,4 +22,8 @@ scan argv._[0], (tokens) ->
     program = parse tokens
     if argv.s
         console.log(if error.count is 0 then 'yes' else 'no')
+        return
+    return if error.count > 0
+    if argv.a
+        console.log program
         return
