@@ -7,7 +7,7 @@ class Block
     generator: {
         java: ->
             block = "{\n"
-            for statment in @statements
+            for statement in @statements
                 block += "#{statement.generator.java()}\n"
             return "#{block}}\n"
     }
