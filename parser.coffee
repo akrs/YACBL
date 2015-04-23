@@ -6,8 +6,9 @@ BinaryExpression = require './entities/binaryexpression'
 Block = require './entities/block'
 ClassDec = require './entities/classdec'
 ForLoop = require './entities/for'
-Func = require './entities/func'
+FunctionType = require './entities/func'
 FunctionBlock = require './entities/functionblock'
+FunctionDeclaration = require './entities/functiondeclaration'
 FunctionCall = require './entities/functioncall'
 GenericType = require './entities/generictype'
 IfStatement = require './entities/if'
@@ -22,6 +23,7 @@ TupleAssignment = require './entities/tupleassignment'
 TupleDeclaration = require './entities/tupledec'
 Type = require './entities/type'
 UnaryExpression = require './entities/unaryexpression'
+VarRef = require './entities/varref'
 WhileLoop = require './entities/while'
 
 tokens = []
@@ -79,7 +81,7 @@ parseClass = ->
     return new ClassDec name, parent, properties
 
 parsePropertyDeclaration = ->
-    # note, this looks stupid. Why you no requre this?
+    # note, this if statement looks stupid. Why you requre this?
     # the problem is, constructors don't have an access level.
     # gnaw on that.
     if at ['public', 'private', 'protected']
@@ -101,7 +103,7 @@ parsePropertyDeclaration = ->
     return new PropDec accessLevel, final, declaration, whereExp
 
 parseFunc = ->
-    name = match ['ID', 'main']
+    name = new VarRef match ['ID', 'main']
     match ':'
     match 'func'
     match '('
@@ -113,7 +115,7 @@ parseFunc = ->
     match ')'
     block = parseFuncBlock()
 
-    return new Func name, params, returns, block
+    return new FunctionDeclaration name, params, returns, block
 
 parseParameters = ->
     parameters = []
@@ -170,12 +172,12 @@ parseType = ->
             returns.push parseType()
             match ',' if at ','
         match ')'
-        return new Func undefined, params, returns, undefined
+        return new FunctionType undefined, params, returns, undefined
     else if at ['tuple', 'ID']
-        type = match()
+        type = new Type match()
         if at '('
             match '('
-            innertype = parseType()
+            innertype = new Type parseType()
             match ')'
             return new GenericType type, innertype
         return new Type type
@@ -185,7 +187,7 @@ parseTupleDeclaration = ->
     names.push match 'ID'
     while at ','
         match ','
-        names.push match 'ID'
+        names.push new VarRef match 'ID'
     if at ':'
         types = []
         types.push matchType()
@@ -264,7 +266,7 @@ parseIf = ->
 parseForLoop = ->
     match 'for'
     match '('
-    innerId = match 'ID'
+    innerId = new VarRef match 'ID'
     match 'in'
     # TODO: refactor range expression into the exp chain, allow for function calls and stuff here
     generator = if at 'ID' then match 'ID' else parseRange()
@@ -402,7 +404,7 @@ parseExp10 = ->
         else if next() is '['
             return parseArrayAccess()
         else
-            return match 'ID'
+            return new VarRef match 'ID'
     else if at '('
         match '('
         result = parseExp()
@@ -423,7 +425,7 @@ parseExp10 = ->
         error 'expression expected', tokens[0]
 
 parseFuncCall = ->
-    id = match 'ID'
+    id = new VarRef match 'ID'
     match '('
     params = []
     while not at ')'
@@ -434,7 +436,7 @@ parseFuncCall = ->
     return new FunctionCall id, params
 
 parseArrayAccess = ->
-    id = match 'ID'
+    id = new VarRef match 'ID'
     match '['
     exp = parseExp()
     match ']'

@@ -1,5 +1,5 @@
 class FunctionDeclaration
-    constructor: (@name, @params, @returns, @block) ->
+    constructor: (@id, @params, @returns, @block) ->
 
     toString: ->
         "(function #{@name.lexeme} #{@params.join(' ')}

@@ -1,5 +1,5 @@
 class ClassDec
-    constructor: (@nameToken, @parentToken, @properties) ->
+    constructor: (@nameToken, @parentToken, @properties, @typeConversions) ->
         @name = @nameToken.lexeme
         @parent = @parentToken.lexeme
     toString: ->

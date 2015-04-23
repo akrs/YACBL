@@ -1,8 +1,9 @@
 class Type
-    constructor: (@type) ->
+    constructor: (@token) ->
+        @id = @token.lexeme
 
     toString: ->
-        "(#{@type.lexeme})"
+        "(#{@id})"
 
     generator: {
         java: ->

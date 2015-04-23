@@ -1,14 +1,33 @@
+{isNumber, compatableNumbers} = require '../utils/typeutils'
+
 class Assign
-    constructor: (@nameToken, @opToken, @exp) ->
-        @name = @nameToken.lexeme
-        @op = @opToken.lexeme
+    constructor: (@varref, @op, @exp) ->
 
     toString: ->
-        "(#{@name} #{@op} #{@exp})"
+        "(#{@varref} #{@op} #{@exp})"
+
+    type: (context) ->
+        return undefined
+
+    analyse: (context) ->
+        if not @varref.analyse(context) # will return true if the var exists
+            return false
+
+        if isNumber(context.variables[@varref.id].type(context))
+            unless compatableNumbers(context.variables[@varref.id], @exp.type(context))
+                error("incompatiable number types", @varref.token.line)
+                return false
+        else
+            if context.variables[@varref.id].type(context) isnt @exp.type(context)
+                error("type mismatch", @varref.token.line)
+                return false
+
+        return true
+
 
     generator: {
         java: ->
-            return "#yac_{@name.generator.java()} #{@op} #{@exp.generator.java()};"
+            return "#yac_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
     }
-
+    
 module.exports = Assign
