@@ -415,7 +415,7 @@ parseExp10 = ->
             match '$('
             strprt.push parseExp()
             match ')'
-            strprt.push match 'STRPRT'
+            strprt.push match 'STRPRT'   #TODO I think this is wrong
         return new StringPart strprt
     else if at ['INTLIT', 'FLOATLIT', 'STRLIT', 'true', 'false']
         return new Literal match()

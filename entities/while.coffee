@@ -2,6 +2,6 @@ class While
     constructor: (@condition, @block) ->
 
     toString: ->
-        "(#{@exp} #{@block})"
+        "(#{@condition} #{@block})"
 
 module.exports = While
