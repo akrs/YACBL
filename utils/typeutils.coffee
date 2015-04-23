@@ -9,8 +9,13 @@ leastCommonNumber = (x, y) ->
 isNumber = (x) ->
     return ['uint', 'int', 'float'].some((kind) -> kind is x)
 
+# Checks to see if we can coerce the number y into a x
+compatableNumbers = (x, y) ->
+    heiarchy = ['uint', 'int', 'float']
+    return heiarchy.indexOf(x) <= heiarchy.indexOf(y)
 
 module.exports = {
     leastCommonNumber: leastCommonNumber,
     isNumber: isNumber
+    compatableNumbers: compatableNumbers
 }

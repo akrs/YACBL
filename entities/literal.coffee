@@ -1,16 +1,19 @@
 class Literal
-    constructor: (@val) ->
+    constructor: (@token) ->
 
     toString: ->
-        return "#{@val.lexeme}"
+        return "#{@token.lexeme}"
 
     type: ->
-        switch @val.kind
+        switch @token.kind
             when 'FLOATLIT'
                 return 'float'
             when 'INTLIT'
                 return 'int'
             when 'STRLIT'
                 return 'String'
+
+    analyse: ->
+        return true
 
 module.exports = Literal

@@ -174,10 +174,10 @@ parseType = ->
         match ')'
         return new FunctionType undefined, params, returns, undefined
     else if at ['tuple', 'ID']
-        type = match()
+        type = new Type match()
         if at '('
             match '('
-            innertype = parseType()
+            innertype = new Type parseType()
             match ')'
             return new GenericType type, innertype
         return new Type type
@@ -266,7 +266,7 @@ parseIf = ->
 parseForLoop = ->
     match 'for'
     match '('
-    innerId = match 'ID'
+    innerId = new VarRef match 'ID'
     match 'in'
     # TODO: refactor range expression into the exp chain, allow for function calls and stuff here
     generator = if at 'ID' then match 'ID' else parseRange()

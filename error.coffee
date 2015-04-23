@@ -22,6 +22,10 @@ error.parserError = (kind, token) ->
         console.log "Unexpected #{kind}"
     error.count++
 
+error.analysisError = (message, line) ->
+    console.log "#{message} on line #{line}"
+    error.count++
+
 error.count = 0
 
 module.exports = error

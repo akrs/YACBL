@@ -1,6 +1,6 @@
 class Type
-    constructor: (@typeToken) ->
-        @id = @typeToken.lexeme
+    constructor: (@token) ->
+        @id = @token.lexeme
 
     toString: ->
         "(#{@id})"
