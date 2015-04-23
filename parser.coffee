@@ -164,7 +164,7 @@ parseType = ->
         match ')'
         match '->'
         match '('
-        returns =[]
+        returns = []
         until at ')'
             if at 'void'
                 returns.push 'void'

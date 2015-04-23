@@ -6,7 +6,7 @@ class StringPart
 
     generator: {
         java: ->
-            stringPart = "(\"\""
+            stringPart = '(""'
             for parts in @part
                stringPart += "+ (#{@parts.generator.java()})"
             return "#{stringPart})"

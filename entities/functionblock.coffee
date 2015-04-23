@@ -9,6 +9,7 @@ class FunctionBlock
             statemnts = "{\n"
             for statement in @statements
                 statemnts += "#{statement.generator.java()}\n"
+            rets = ""
             return "\n" #TODO add returns
     }
 
