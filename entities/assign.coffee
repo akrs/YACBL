@@ -27,7 +27,7 @@ class Assign
 
     generator: {
         java: ->
-            return "#yac_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
+            return "_#{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
     }
     
 module.exports = Assign
