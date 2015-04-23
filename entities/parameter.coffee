@@ -4,4 +4,9 @@ class Parameter
     toString: ->
         "(#{@name} : #{@type})"
 
+    generator: {
+        java: ->
+            return "(#{@type.lexeme} #{@name.lexeme})"
+    }
+
 module.exports = Parameter
