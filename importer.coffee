@@ -9,11 +9,10 @@ IMPORT_LINE = XRegExp '/import ([a-zA-Z_][a-zA-Z0-9]*)\s*\n/'
 
 importer = 
     listOfImports: []
-    importcode : (filename) ->    
+    importCode : (filename, callback) ->    
         if filename not in importer.listOfImports    
             importer.listOfImports.push filename
             fs.writeFileSync 'imported.yac', fs.readFileSync filename, 'utf8'
-
 
         baseStream = fs.createReadStream filename, {encoding: 'utf8'}
         stream = byline baseStream, {keepEmptyLines: true}
@@ -22,7 +21,7 @@ importer =
         stream.on 'readable', () ->
             importer.scanForImports stream.read(), ++linenumber, 'imported.yac'
         stream.once 'end', () ->
-
+            callback 'imported.yac'
     commenting : false
     scanForImports : (line, linenumber, filename) ->
         return if not line
@@ -68,7 +67,7 @@ importer =
                         newCode = currentCode.substring(0, indexOfLine) + currentCode.substring(indexOfLine + line.length)
                         fs.writeFileSync filename, newCode
                         
-                        if file not in importer.listOfImports    
+                        if file not in importer.listOfImports 
                             importer.listOfImports.push file
                             codeToImport = fs.readFileSync file, 'utf8'
                             fs.appendFileSync 'imported.yac', codeToImport
@@ -76,7 +75,7 @@ importer =
                         
                         if fs.readFileSync('imported.yac', 'utf8').toString().indexOf('import') > -1
                             console.log 'here'
-                            importer.importcode 'imported.yac'
+                            importer.importCode 'imported.yac'
                         
                         break
 
