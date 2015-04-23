@@ -3,7 +3,8 @@ isNumber = utils.isNumber
 leastCommonNumber = utils.leastCommonNumber
 
 class BinaryExpression
-    constructor: (@leftSide, @op, @rightSide) ->
+    constructor: (@leftSide, @opToken, @rightSide) ->
+        @op = @opToken.lexeme
 
     toString: ->
         "(#{@leftSide} #{@op} #{@rightSide}"
@@ -41,8 +42,5 @@ class BinaryExpression
                 return @leftSide.type(context)?.properties[@rightSide.id]?.type()
             else
                 return undefined
-
-
-
 
 module.exports = BinaryExpression

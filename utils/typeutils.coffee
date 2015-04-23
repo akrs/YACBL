@@ -1,8 +1,8 @@
 leastCommonNumber = (x, y) ->
     if x is 'float' or y is 'float'
-        return float
+        return 'float'
     if x is 'int' or y is 'int'
-        return int
+        return 'int'
     else
         return 'uint'
 
