@@ -233,7 +233,7 @@ parseFuncBlock = ->
     match '}'
     return new FunctionBlock statements, returns
 
-parseStatment = ->
+parseStatment = -> #TODO, correct typo should be parseStatement
     if at ['for', 'while', 'if']
         return parseIf() if at 'if'
         return parseForLoop() if at 'for'

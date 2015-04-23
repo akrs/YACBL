@@ -4,4 +4,9 @@ class TupleAssignment
     toString: ->
         "(#{@names.join(' ')} #{@exp?.join(' ')})"
 
+    generator: { #TODO, same as tupledec
+        java: ->
+            return "(#yac_{@names} #{@exp.generator.java()})"
+    }
+
 module.exports = TupleAssignment

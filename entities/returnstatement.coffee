@@ -4,4 +4,9 @@ class ReturnStatement
     toString: ->
         "#{@exp}"
 
+    generator: {
+        java: ->
+            return "(#{@exp.generator.java()})"
+    }
+
 module.exports = ReturnStatement

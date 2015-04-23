@@ -4,4 +4,9 @@ class Type
     toString: ->
         "(#{@type.lexeme})"
 
+    generator: {
+        java: ->
+            return "(#{@type.lexeme})"
+    }
+
 module.exports = Type
