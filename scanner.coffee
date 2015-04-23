@@ -98,13 +98,8 @@ scan = (line, linenumber, tokens) ->
 
             # Two-character tokens
             else if ///:=                   # Assignment
-<<<<<<< HEAD
                   |<=|==|>=|!=|%=           # Relative checkers
                   |\+=|-=|\/=|\*=|\+\+|--   # Modify and reassign
-=======
-                  |<=|==|>=|!=              # Relative checkers
-                  |\+=|-=|\/=|\*=|\+\+|--|% # Modify and reassign
->>>>>>> origin/ss/parsertests
                   |->                       # Function arrow
                   |<<|>>                    # Bitshift
                   |\|\||&&                  # And & Or
