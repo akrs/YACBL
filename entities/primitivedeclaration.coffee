@@ -5,6 +5,11 @@ class PrimitiveDeclaration
     toString: ->
         "(#{@name.lexeme} #{@type?.lexeme} #{@exp?})"
 
+    generator: {
+        java: ->
+            return "(#{@accessLevel.lexeme} #{if @final.lexeme? then 'final' else ''} #{@declaration.generator.java()} #{if @whereExp.generator.java()? then @whereExp.generator.java() else ''})"
+    }
+
     analyse: (context) ->
         @_type ?= @exp.type(context)
 

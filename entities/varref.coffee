@@ -5,6 +5,11 @@ class VarRef
     toString: ->
         return @id
 
+    generators: {
+        java: ->
+            return "_#{@id}"
+    }
+
     analyse: (context) ->
         if context.variables[@id]?
             return true
@@ -13,10 +18,5 @@ class VarRef
         else
             error("use of variable #{id} before it was declared", @token.lexeme)
             return false
-
-    generators: {
-        java: ->
-            return "_#{@id}"
-    }
 
 module.exports = VarRef
