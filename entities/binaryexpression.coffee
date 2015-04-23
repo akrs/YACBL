@@ -1,7 +1,13 @@
 class BinaryExpression
-    constructor: (@leftSide, @op, @rightSide) ->
+    constructor: (@leftSide, @opToken, @rightSide) ->
+        @op = @opToken.lexeme
 
     toString: ->
         "(#{@leftSide} #{@op} #{@rightSide}"
+
+    generator: {
+        java: ->
+            return "{@leftSide.generator.java()} #{@op} #{@rightSide.generator.java()}"
+    }
 
 module.exports = BinaryExpression
