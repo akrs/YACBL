@@ -1,7 +1,7 @@
 class Func
     constructor: (@id, @params, @returns, @block) ->
 
-    # note, this entity is used by both full funcs and mere func types
+    # note, this entity is used by both full funcs and mere func types    
     toString: ->
         "(function #{@id?.lexeme} #{@params.join(' ')}
                   #{if @returns[0] is 'void' then 'void' else @returns.join(' ')} #{@block?})"
@@ -12,11 +12,11 @@ class Func
             if @returns[0] is 'void'
                 rets = "void"
             else
-                returnDeclorations = ""
+                returnDeclorations = ""            #TODO fix this is supposed to be type not decloration
                 for type, i in @returns
                     returnDeclorations += "public #{type} _#{i};\n"
                 rets = "class _returns_#{@id.lexeme}{\n#{returnDeclorations}}\n _returns_#{@id.lexeme}"
-            return "#{rets} _#{id}(#{@params.join(', ')})#{block.generator.java()}"
+            return "#{rets} _#{id.lexeme}(#{@params.join(', ')})#{block.generator.java(@id.lexeme)}"
 
     }
 

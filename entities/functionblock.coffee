@@ -5,12 +5,12 @@ class FunctionBlock
         "(#{@statements.join(' ')} #{@returns.join(' ')})"
 
     generator: {
-        java: ->
+        java: (funcName) ->
             statemnts = "{\n"
             for statement in @statements
                 statemnts += "#{statement.generator.java()}\n"
-            rets = ""
-            return "\n" #TODO add returns
+            rets = "_returns_#{funcName} _returns_oject = new _returns_#{funcName}();\n#{@returns.generator.java(funcName)}\n"
+            return "#{statements}\n#{rets}"
     }
 
 module.exports = FunctionBlock

@@ -6,11 +6,7 @@ class FunctionCall
 
     generator: {
         java: ->
-            args = ""
-            for param in params
-                args += "#{param.generator.java()}, "
-            args = args[0..(args.length - 3)]
-            return "#{@id}(#{args})"
+            return "#{@id}(#{params?.join(', ')})"
     }
 
 module.exports = FunctionCall
