@@ -8,15 +8,8 @@ class Func
     
     generator: {
         java: ->
-            rets = ""
-            if @returns[0] is 'void'
-                rets = "void"
-            else
-                returnDeclorations = ""            #TODO fix this is supposed to be type not decloration
-                for type, i in @returns
-                    returnDeclorations += "public #{type} _#{i};\n"
-                rets = "class _returns_#{@id.lexeme}{\n#{returnDeclorations}}\n _returns_#{@id.lexeme}"
-            return "#{rets} _#{id.lexeme}(#{@params.join(', ')})#{block.generator.java(@id.lexeme)}"
+            rets = if @returns[0] is 'void' then 'void' else @returns.join(', ') #not sure if coffee is best coffee
+            return "func (#{@params.join(', ')}) -> (#{@rets})"  
 
     }
 
