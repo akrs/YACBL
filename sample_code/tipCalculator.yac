@@ -1,0 +1,9 @@
+calcTip : func (originalCost : float, tipRate : float) -> (float) {
+    return (originalCost + (originalCost * tipRate))
+}
+
+main : func (args : Array(String)) -> (void) {
+    originalCost : float = Float.parseFloat(args[0])
+    tipRate := Float.parseFloat(args[1])
+    print("$(calcTip(originalCost, tipRate))")
+}
