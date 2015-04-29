@@ -77,9 +77,9 @@ describe 'Parser', ->
                 expect(program.declarations[0].id).to.eql(new VarRef { "kind": "main", "lexeme": "main", "line": 1, "col": 1 })
                 expect(program.declarations[0].block.statements[0].id).to.eql(new VarRef { "kind": "ID", "lexeme": "print", "line": 2, "col": 5 })
 
-            it 'should parse triple'
-            # other simple programs
+        context.skip 'parsing classes', ->
+            it 'should parse animals', ->
+                program = parse require('./test_files/parser/animals')[..]
+                expect(program.declarations).to.have.length(5)
 
-        context 'parsing classes', ->
-            it 'should parse animals'
-            # other class stuff
+
