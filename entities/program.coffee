@@ -8,7 +8,7 @@ class Program
         java: ->
             dec = ""
             for declaration in @declarations
-                    dec += "(#{@declarations.generator.java()})\n"
+                    dec += "(#{declaration.generator.java()})\n"
             return dec
     }
 
