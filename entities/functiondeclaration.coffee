@@ -2,7 +2,7 @@ class FunctionDeclaration
     constructor: (@id, @params, @returns, @block) ->
 
     toString: ->
-        "(function #{@name.lexeme} #{@params.join(' ')}
+        "(function #{@id.lexeme} #{@params.join(' ')}
                   #{@returns.join(' ')} #{@block})"
 
 module.exports = FunctionDeclaration
