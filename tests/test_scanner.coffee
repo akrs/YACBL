@@ -11,6 +11,9 @@ scan = require '../scanner'
 scanLine = scan.scanString
 
 describe 'Scanner', ->
+    after 'remove stub', ->
+        error.scannerError.restore()
+
     describe 'Finding numbers: ', ->
         describe 'an integer declaration', ->
             tokens = scanLine 'x : int = 38437'

@@ -1,5 +1,5 @@
 [
-    { "kind": "ID", "lexeme": "main", "line": 1, "col": 1 },
+    { "kind": "main", "lexeme": "main", "line": 1, "col": 1 },
     { "kind": ":", "lexeme": ":", "line": 1, "col": 6 },
     { "kind": "func", "lexeme": "func", "line": 1, "col": 8 },
     { "kind": "(", "lexeme": "(", "line": 1, "col": 13 },
