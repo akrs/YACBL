@@ -10,7 +10,7 @@ sinon.stub(error, 'analysisError')
 BinaryExpression = require '../entities/binaryexpression'
 Literal = require '../entities/literal'
 
-describe.only 'Analysis', ->
+describe 'Analysis', ->
     beforeEach 'reset stub', ->
         error.analysisError.reset()
 

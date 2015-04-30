@@ -5,6 +5,6 @@ class While
         "(#{@condition} #{@block})"
 
     java: ->
-        return "while ( #{@condition.generator.java()} ) #{@block.generator.java}"
+        return "while ( #{@condition.java()} ) #{@block.java}"
 
 module.exports = While

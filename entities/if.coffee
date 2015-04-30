@@ -5,6 +5,6 @@ class If
         "(#{@condition} #{@block})"
 
     java: ->
-        "if(#{condition.generator.java()})#{block.generator.java()}"
+        "if(#{condition.java()})#{block.java()}"
         
 module.exports = If

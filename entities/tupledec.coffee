@@ -6,6 +6,6 @@ class TupleDec
 
 #TODO, gotta fix this and do it later since java doesnt do tuples 
     java: ->
-        return "(_#{@names} #{type.generator.java()} #{@exp.generator.java()})"
+        return "(_#{@names} #{type.java()} #{@exp.java()})"
 
 module.exports = TupleDec

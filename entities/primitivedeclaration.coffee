@@ -6,7 +6,7 @@ class PrimitiveDeclaration
         "(#{@id} #{@_type?.lexeme} #{@exp?})"
 
     java: ->
-        return "(#{@_type.lexeme} _#{@id} = #{@exp.generator.java()})"
+        return "(#{@_type.lexeme} _#{@id} = #{@exp.java()})"
 
     analyse: (context) ->
         @_type ?= @exp.type(context)

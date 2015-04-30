@@ -6,6 +6,6 @@ class TupleAssignment
 
     #TODO, same as tupledec
     java: ->
-        return "(_#{@names} #{@exp.generator.java()})"
+        return "(_#{@names} #{@exp.java()})"
 
 module.exports = TupleAssignment

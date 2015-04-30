@@ -6,6 +6,6 @@ class Type
         "(#{@id})"
 
     java: ->
-        return "(#{@type.lexeme})"
+        return "(#{@id})"
 
 module.exports = Type

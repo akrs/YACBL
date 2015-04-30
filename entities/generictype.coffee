@@ -5,7 +5,7 @@ class GenericType
         return "#{@_type}(#{@innerType})"
 
     java: ->
-        if @_type.lexeme is "ID" then "#{@innerType.generator.java()}[]" else "#{@_type.generator.java()}"
+        if @_type.lexeme is "ID" then "#{@innerType.java()}[]" else "#{@_type.java()}"
 
     type: ->
         return @_type

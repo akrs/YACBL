@@ -1,19 +1,21 @@
+lookup = require('../generator').lookup
 class FunctionDeclaration
     constructor: (@id, @params, @returns, @block) ->
 
     toString: ->
-        "(function #{@id.lexeme} #{@params.join(' ')}
+        "(function #{@id} #{@params.join(' ')}
                   #{@returns.join(' ')} #{@block})"
     
     java: ->
         rets = ""
-        if @returns[0] is 'void'
-            rets = "void"
+        id = lookup[@id] || "_#{@id}"
+        if @returns[0].lexeme is 'void'
+            rets = "public static void"
         else
             returnDeclorations = ""
             for type, i in @returns
-                returnDeclorations += "public #{type} _#{i};\n"
-            rets = "class _returns_#{@id.lexeme}{\n#{returnDeclorations}}\n _returns_#{@id.lexeme}"
-        return "#{rets} _#{id.lexeme}(#{@params.join(', ')})#{block.generator.java(@id.lexeme)}"
+                returnDeclorations += "public #{type.java()} _#{i};\n"
+            rets = "class $returns_#{id}{\n#{returnDeclorations}}\n public static $returns_#{id}"
+        return "#{rets} #{id}(#{@params.join(', ')})#{@block.java(id)}"
 
 module.exports = FunctionDeclaration

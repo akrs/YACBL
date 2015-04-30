@@ -7,8 +7,8 @@ class FunctionBlock
     java: (funcName) ->
         statemnts = "{\n"
         for statement in @statements
-            statemnts += "#{statement.generator.java()}\n"
-        rets = "_returns_#{funcName} _returns_oject = new _returns_#{funcName}();\n#{@returns.generator.java(funcName)}\n"
-        return "#{statements}\n#{rets}"
+            statemnts += "#{statement.java()}\n"
+        rets = "_returns_#{funcName} _returns_oject = new _returns_#{funcName}();\n#{@returns?.java(funcName)}\n"
+        return "#{statemnts}\n#{rets}"
 
 module.exports = FunctionBlock

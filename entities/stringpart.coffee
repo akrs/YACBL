@@ -7,7 +7,7 @@ class StringPart
     java: ->
         stringPart = '(""'
         for parts in @part
-           stringPart += "+ (#{@parts.generator.java()})"
+           stringPart += "+ (#{@parts.java()})"
         return "#{stringPart})"
 
 module.exports = StringPart

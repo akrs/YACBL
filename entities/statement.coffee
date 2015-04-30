@@ -5,7 +5,7 @@ class Statement
         "(#{@loop} #{@if} #{@declaration} #{@assign} #{@exp})"
 
     java: ->
-        return "(#{@loop.generator.java()} #{@if.generator.java()} #{@declaration.generator.java()} #{@assign.generator,java()} #{@exp.generator.java()})"
+        return "(#{@loop.java()} #{@if.java()} #{@declaration.java()} #{@assign.generator,java()} #{@exp.java()})"
     
 module.exports = Statement
 

@@ -7,7 +7,7 @@ class Program
     java: ->
         dec = ""
         for declaration in @declarations
-                dec += "(#{declaration.generator.java()})\n"
+                dec += "(#{declaration.java()})\n"
         return dec
 
 module.exports = Program

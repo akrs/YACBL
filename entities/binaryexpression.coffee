@@ -9,7 +9,7 @@ class BinaryExpression
         "(#{@leftSide} #{@op} #{@rightSide}"
             
     java: ->
-        return "{@leftSide.generator.java()} #{@op} #{@rightSide.generator.java()}"
+        return "{@leftSide.java()} #{@op} #{@rightSide.java()}"
 
     typesBothInList: (list, context) ->
         typeMatch = (variable) ->

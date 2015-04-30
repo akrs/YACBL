@@ -9,7 +9,7 @@ class ClassDec
         props = ""
         
         for property in @properties
-            props += properties.generator.java()
+            props += properties.java()
 
         return "class #{@name} extends #{@parent}{\n#{props}}"
         

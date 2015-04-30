@@ -5,6 +5,6 @@ class PropDec
         "(#{@accessLevel} #{if @final? then 'final' else ''} #{@declaration} #{if @whereExp? then @whereExp else ''})"
 
     java: ->
-        return "(#{@accessLevel.lexeme} #{if @final.lexeme? then 'final' else ''} #{@declaration.generator.java()} #{if @whereExp.generator.java()? then @whereExp.generator.java() else ''})"
+        return "(#{@accessLevel.lexeme} #{if @final.lexeme? then 'final' else ''} #{@declaration.java()} #{if @whereExp.java()? then @whereExp.java() else ''})"
 
 module.exports = PropDec
