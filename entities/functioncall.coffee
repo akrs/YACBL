@@ -1,3 +1,4 @@
+lookup = require('../generator').lookup
 class FunctionCall
     constructor: (@id, @params) ->
 
@@ -5,6 +6,10 @@ class FunctionCall
         "(#{id.lexeme} (#{params?.join(' ')}))"
 
     java: ->
-        return "#{@id}(#{params?.join(', ')})"
+        id = lookup["#{@id}"] || "_#{@id}"
+        params = ""
+        for param in @params
+            params += if param.token.kind is 'STRLIT' then "\"#{param}\"" else "#{param}"
+        return "#{id}(#{params})"
 
 module.exports = FunctionCall

@@ -9,7 +9,9 @@ class FunctionDeclaration
     java: ->
         rets = ""
         id = lookup[@id] || "_#{@id}"
-        if @returns[0].lexeme is 'void'
+        if id is 'main'
+            return "public static void main(String[] args)#{@block.java(id)}"
+        else if @returns[0].lexeme is 'void'
             rets = "public static void"
         else
             returnDeclorations = ""

@@ -7,7 +7,7 @@ class Program
     java: ->
         dec = ""
         for declaration in @declarations
-                dec += "(#{declaration.java()})\n"
-        return dec
+                dec += "\t#{declaration.java()}\n"
+        return "public class Program{\n#{dec}\n}"
 
 module.exports = Program
