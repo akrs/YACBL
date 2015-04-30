@@ -4,7 +4,7 @@ class Assign
     constructor: (@varref, @op, @exp) ->
 
     toString: ->
-        "(#{@varref} #{@op} #{@exp})"
+        "#{@varref} #{@op} #{@exp}"
 
     java: ->
         return "_{@varref.java()} #{@op} #{@exp.java()};"

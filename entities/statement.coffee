@@ -2,7 +2,7 @@ class Statement
     constructor: (@loop, @if, @declaration, @assign, @exp) ->
 
     toString: ->
-        "(#{@loop} #{@if} #{@declaration} #{@assign} #{@exp})"
+        "#{@loop} #{@if} #{@declaration} #{@assign} #{@exp}"
 
     java: ->
         return "#{@loop.java()} #{@if.java()} #{@declaration.java()} #{@assign.java()} #{@exp.java()}"

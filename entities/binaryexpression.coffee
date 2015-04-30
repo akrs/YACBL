@@ -2,7 +2,7 @@
 error = require('../error').analysisError
 
 class BinaryExpression
-    constructor: (@leftSide, @opToken, @rightSide) ->
+    constructor: (@leftSide, @opToken, @rightSide, @typeStr) ->
         @op = @opToken.lexeme
 
     toString: ->

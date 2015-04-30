@@ -6,7 +6,7 @@ class ArrayAccess
         "#{@varref.id}[#{@exp}]"
 
     java: ->
-        return "_#{varref.id}[#{@exp.java()}]"
+        return "_#{@varref.id}[#{@exp.java()}]"
 
     type: (context) ->
         return context.variables[@varref.id].innerType?.type(context)

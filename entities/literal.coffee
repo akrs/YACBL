@@ -5,8 +5,7 @@ class Literal
         "#{@token.lexeme}"
 
     java: ->
-        lit = if type() is 'String' then "\"#{@token.lexeme}\""
-        console.log lit
+        lit = if this.type() is 'String' then "\"#{@token.lexeme}\""
         return lit
 
     type: ->

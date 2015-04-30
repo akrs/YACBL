@@ -1,5 +1,6 @@
 error = require('./error').parserError
 
+
 ArrayAccess = require './entities/arrayaccess'
 Assignment = require './entities/assign'
 BinaryExpression = require './entities/binaryexpression'
@@ -148,6 +149,7 @@ parsePrimitive = ->
     else
         match ':='
         exp = parseExp()
+        type = exp.typeStr || exp.type?() || "String"
 
     return new PrimitiveDeclaration name, type, exp
 
@@ -261,6 +263,10 @@ parseIf = ->
     condition = parseExp()
     match ')'
     block = parseBlock()
+    if at 'else'
+        match()
+        elseBlock = parseBlock()
+        return new IfStatement condition, block, elseBlock
     return new IfStatement condition, block
 
 parseForLoop = ->
@@ -318,7 +324,7 @@ parseExp = ->
     while at ['||', '&&']
         operation = if at '||' then match '||' else match '&&'
         rightSide = parseExp1()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, "boolean"
     return leftSide
 
 parseExp1 = ->
@@ -326,7 +332,7 @@ parseExp1 = ->
     if at ['<', '<=', '==', '!=', '>=', '>']
         operation = match ['<', '<=', '==', '!=', '>=', '>']
         rightSide = parseExp2()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, "boolean"
     return leftSide
 
 parseExp2 = ->
@@ -334,7 +340,7 @@ parseExp2 = ->
     while at ['|', '&', '^']
         operation = match ['|', '&', '^']
         rightSide = parseExp3()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, leftSide.typeStr
     return leftSide
 
 parseExp3 = ->
@@ -342,7 +348,7 @@ parseExp3 = ->
     while at ['<<', '>>']
         operation = match ['<<', '>>']
         rightSide = parseExp4()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, leftSide.typeStr
     return leftSide
 
 parseExp4 = ->
@@ -350,7 +356,7 @@ parseExp4 = ->
     while at ['+', '-']
         operation = match ['+', '-']
         rightSide = parseExp5()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, leftSide.typeStr #TODO do this right
     return leftSide
 
 parseExp5 = ->
@@ -358,7 +364,7 @@ parseExp5 = ->
     while at ['*', '/', '%']
         operation = match ['*', '/', '%']
         rightSide = parseExp6()
-        return new BinaryExpression leftSide, operation, rightSide
+        return new BinaryExpression leftSide, operation, rightSide, leftSide.typeStr
     return leftSide
 
 parseExp6 = ->
@@ -367,7 +373,7 @@ parseExp6 = ->
     rightSide = parseExp7()
 
     if operation?
-        return new UnaryExpression rightSide, 'prefix', operation
+        return new UnaryExpression rightSide, 'prefix', operation, rightSide.typeStr
     else
         return rightSide
 
@@ -377,7 +383,7 @@ parseExp7 = ->
     rightSide = parseExp8()
 
     if operation?
-        return new UnaryExpression rightSide, 'prefix', operation
+        return new UnaryExpression rightSide, 'prefix', operation, rightSide.typeStr
     else
         return rightSide
 
@@ -385,7 +391,7 @@ parseExp8 = ->
     leftSide = parseExp9()
     if at ['++', '--']
         operation = match ['++', '--']
-        return new UnaryExpression leftSide, 'postfix', operation
+        return new UnaryExpression leftSide, 'postfix', operation, leftSide.typeStr
     return leftSide
 
 parseExp9 = ->
@@ -417,7 +423,7 @@ parseExp10 = ->
             match '$('
             strprt.push parseExp()
             match ')'
-            strprt.push match 'STRPRT'   #TODO I think this is wrong
+            strprt.push match 'STRPRT' 
         return new StringPart strprt
     else if at ['INTLIT', 'FLOATLIT', 'STRLIT', 'true', 'false']
         return new Literal match()

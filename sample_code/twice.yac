@@ -2,7 +2,7 @@ squared : func (x:int) -> (int) {
 	return x * x
 }
 
-twice : func (f : func(int) -> int, x : int) -> (int) {
+twice : func (f : func(int) -> (int), x : int) -> (int) {
 	return f(f(x))
 }
 

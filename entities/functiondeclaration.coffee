@@ -18,6 +18,10 @@ class FunctionDeclaration
             for type, i in @returns
                 returnDeclorations += "public #{type.java()} _#{i};\n"
             rets = "class $returns_#{id}{\n#{returnDeclorations}}\n public static $returns_#{id}"
-        return "#{rets} #{id}(#{@params.join(', ')})#{@block.java(id)}"
+        params = ""
+        for param in @params
+            params += "#{param.type} #{param.name.lexeme},"
+        params = params[..-2]
+        return "#{rets} #{id}(#{params})#{@block.java(id)}"
 
 module.exports = FunctionDeclaration

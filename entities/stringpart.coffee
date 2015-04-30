@@ -2,12 +2,13 @@ class StringPart
     constructor: (@parts) ->
 
     toString: ->
-        "#{parts.join(' ')}"
+        "#{@parts.join(' ')}"
 
     java: ->
         stringPart = '(""'
-        for parts in @part
-           stringPart += "+ (#{@parts.java()})"
+        for part in @parts
+           part = if part.id then "#{part.id}" else "\"#{part.lexeme}\""
+           stringPart += "+ (#{part})"
         return "#{stringPart})"
 
 module.exports = StringPart

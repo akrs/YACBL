@@ -3,10 +3,10 @@ class PrimitiveDeclaration
         @id = @nameToken.lexeme
 
     toString: ->
-        "(#{@id} #{@_type?.lexeme} #{@exp?})"
+        "#{@id} #{@_type?.lexeme} #{@exp?}"
 
     java: ->
-        return "(#{@_type.lexeme} _#{@id} = #{@exp.java()})"
+        return "#{@_type} _#{@id} = #{@exp.java()}"
 
     analyse: (context) ->
         @_type ?= @exp.type(context)

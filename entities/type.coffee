@@ -3,9 +3,9 @@ class Type
         @id = @token.lexeme
 
     toString: ->
-        "(#{@id})"
+        "#{@id}"
 
     java: ->
-        return "(#{@id})"
+        return "#{@id}"
 
 module.exports = Type
