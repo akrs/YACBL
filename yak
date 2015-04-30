@@ -14,6 +14,7 @@ importer = require './importer'
 scan = require './scanner'
 parse = require './parser'
 error = require './error'
+generate = require './generator'
 
 importer.importCode argv._[0], (filename) ->
     if argv.i
@@ -27,5 +28,6 @@ importer.importCode argv._[0], (filename) ->
         program = parse tokens
         return if error.count > 0
         if argv.a
-            console.log program.toString()
+            console.log program
             return
+        generate program
