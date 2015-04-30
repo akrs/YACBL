@@ -8,10 +8,8 @@ class BinaryExpression
     toString: ->
         "(#{@leftSide} #{@op} #{@rightSide}"
             
-    generator: {
-        java: ->
-            return "{@leftSide.generator.java()} #{@op} #{@rightSide.generator.java()}"
-    }
+    java: ->
+        return "{@leftSide.generator.java()} #{@op} #{@rightSide.generator.java()}"
 
     typesBothInList: (list, context) ->
         typeMatch = (variable) ->

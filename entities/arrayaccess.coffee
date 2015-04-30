@@ -5,10 +5,8 @@ class ArrayAccess
     toString: ->
         "#{@varref.id}[#{@exp}]"
 
-    generator: {
-        java: ->
-            return "_#{varref.id}[#{@exp.generator.java()}]"
-    }
+    java: ->
+        return "_#{varref.id}[#{@exp.generator.java()}]"
 
     type: (context) ->
         return context.variables[@varref.id].innerType?.type(context)

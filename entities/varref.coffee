@@ -5,10 +5,8 @@ class VarRef
     toString: ->
         return @id
 
-    generators: {
-        java: ->
-            return "_#{@id}"
-    }
+    java: ->
+        return "_#{@id}"
 
     analyse: (context) ->
         if context.variables[@id]?

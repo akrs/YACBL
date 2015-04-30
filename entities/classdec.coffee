@@ -5,15 +5,12 @@ class ClassDec
     toString: ->
         "(Class #{@name} parent: #{@parent} Properties #{@properties.join(' ')})"
 
-    generator: {
-        java: ->
-            props = ""
-            
-            for property in @properties
-                props += properties.generator.java()
+    java: ->
+        props = ""
+        
+        for property in @properties
+            props += properties.generator.java()
 
-            return "class #{@name} extends #{@parent}{\n#{props}}"
-            
-    }
-
+        return "class #{@name} extends #{@parent}{\n#{props}}"
+        
 module.exports = ClassDec

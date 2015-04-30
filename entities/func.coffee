@@ -6,12 +6,9 @@ class Func
         "(function #{@id?.lexeme} #{@params.join(' ')}
                   #{if @returns[0] is 'void' then 'void' else @returns.join(' ')} #{@block?})"
     
-    generator: {
-        java: ->
-            rets = if @returns[0] is 'void' then 'void' else @returns.join(', ') #not sure if coffee is best coffee
-            return "func (#{@params.join(', ')}) -> (#{@rets})"  
-
-    }
+    java: ->
+        rets = if @returns[0] is 'void' then 'void' else @returns.join(', ') #not sure if coffee is best coffee
+        return "func (#{@params.join(', ')}) -> (#{@rets})"  
 
 module.exports = Func
 

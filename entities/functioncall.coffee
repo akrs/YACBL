@@ -4,9 +4,7 @@ class FunctionCall
     toString: ->
         "(#{id.lexeme} (#{params?.join(' ')}))"
 
-    generator: {
-        java: ->
-            return "#{@id}(#{params?.join(', ')})"
-    }
+    java: ->
+        return "#{@id}(#{params?.join(', ')})"
 
 module.exports = FunctionCall

@@ -5,10 +5,8 @@ class PrimitiveDeclaration
     toString: ->
         "(#{@id} #{@_type?.lexeme} #{@exp?})"
 
-    generator: {
-        java: ->
-            return "(#{@_type.lexeme} _#{@id} = #{@exp.generator.java()})"
-    }
+    java: ->
+        return "(#{@_type.lexeme} _#{@id} = #{@exp.generator.java()})"
 
     analyse: (context) ->
         @_type ?= @exp.type(context)

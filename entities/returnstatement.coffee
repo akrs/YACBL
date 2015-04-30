@@ -4,12 +4,10 @@ class ReturnStatement
     toString: ->
         "#{@exps}"
 
-    generator: {
-        java: () ->
-            rets = ""
-            for exp, i in @exps
-                rets += "_return_object._#{i} = #{@exp.generator.java()};\n"
-            return "return _return_object;"
-    }
+    java: () ->
+        rets = ""
+        for exp, i in @exps
+            rets += "_return_object._#{i} = #{@exp.generator.java()};\n"
+        return "return _return_object;"
 
 module.exports = ReturnStatement

@@ -4,10 +4,8 @@ class Statement
     toString: ->
         "(#{@loop} #{@if} #{@declaration} #{@assign} #{@exp})"
 
-    generator: {
-        java: ->
-            return "(#{@loop.generator.java()} #{@if.generator.java()} #{@declaration.generator.java()} #{@assign.generator,java()} #{@exp.generator.java()})"
-    }
+    java: ->
+        return "(#{@loop.generator.java()} #{@if.generator.java()} #{@declaration.generator.java()} #{@assign.generator,java()} #{@exp.generator.java()})"
     
 module.exports = Statement
 

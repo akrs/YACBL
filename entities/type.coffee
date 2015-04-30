@@ -5,9 +5,7 @@ class Type
     toString: ->
         "(#{@id})"
 
-    generator: {
-        java: ->
-            return "(#{@type.lexeme})"
-    }
+    java: ->
+        return "(#{@type.lexeme})"
 
 module.exports = Type

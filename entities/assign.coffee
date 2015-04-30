@@ -6,11 +6,9 @@ class Assign
     toString: ->
         "(#{@varref} #{@op} #{@exp})"
 
-    generator: {
-        java: ->
-            return "_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
-    }
-
+    java: ->
+        return "_{@varref.generator.java()} #{@op} #{@exp.generator.java()};"
+        
     type: (context) ->
         return undefined
 
