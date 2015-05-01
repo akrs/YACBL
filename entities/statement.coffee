@@ -4,7 +4,7 @@ class Statement
     toString: ->
         "#{@loop} #{@if} #{@declaration} #{@assign} #{@exp}"
 
-    java: ->
+    java: (context) ->
         return "#{@loop.java()} #{@if.java()} #{@declaration.java()} #{@assign.java()} #{@exp.java()}"
     
 module.exports = Statement

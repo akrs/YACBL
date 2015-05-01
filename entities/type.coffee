@@ -5,7 +5,7 @@ class Type
     toString: ->
         "#{@id}"
 
-    java: ->
+    java: (context) ->
         return "#{@id}"
 
 module.exports = Type

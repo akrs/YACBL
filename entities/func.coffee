@@ -6,7 +6,7 @@ class Func
         "(function #{@id?.lexeme} #{@params.join(' ')}
                   #{if @returns[0] is 'void' then 'void' else @returns.join(' ')} #{@block?})"
     
-    java: ->
+    java: (context) ->
         rets = if @returns[0] is 'void' then 'void' else @returns.join(', ') #not sure if coffee is best coffee
         return "func (#{@params.join(', ')}) -> (#{@rets})"  
 

@@ -4,7 +4,7 @@ class While
     toString: ->
         "(#{@condition} #{@block})"
 
-    java: ->
+    java: (context) ->
         return "while ( #{@condition.java()} ) #{@block.java}"
 
 module.exports = While

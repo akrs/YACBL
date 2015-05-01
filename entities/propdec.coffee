@@ -4,7 +4,7 @@ class PropDec
     toString: ->
         "(#{@accessLevel} #{if @final? then 'final' else ''} #{@declaration} #{if @whereExp? then @whereExp else ''})"
 
-    java: ->
+    java: (context) ->
         return "(#{@accessLevel.lexeme} #{if @final.lexeme? then 'final' else ''} #{@declaration.java()} #{if @whereExp.java()? then @whereExp.java() else ''})"
 
 module.exports = PropDec

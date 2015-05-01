@@ -5,7 +5,7 @@ class VarRef
     toString: ->
         return @id
 
-    java: ->
+    java: (context) ->
         return "_#{@id}"
 
     analyse: (context) ->

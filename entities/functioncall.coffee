@@ -5,7 +5,7 @@ class FunctionCall
     toString: ->
         "(#{@id.lexeme} (#{params?.join(' ')}))"
 
-    java: ->
+    java: (context) ->
         id = lookup["#{@id}"] || "_#{@id}"
         params = ""
         for param in @params

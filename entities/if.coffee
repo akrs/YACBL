@@ -4,7 +4,7 @@ class If
     toString: ->
         "(#{@condition} #{@block})"
 
-    java: ->
+    java: (context) ->
         "if(#{@condition.java()})#{@block.java()} else #{@elseBlock.java()}"
         
 module.exports = If

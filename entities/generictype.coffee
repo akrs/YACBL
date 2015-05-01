@@ -4,7 +4,7 @@ class GenericType
     toString: ->
         return "#{@_type}(#{@innerType})"
 
-    java: ->
+    java: (context) ->
         if @_type.lexeme is "ID" then "#{@innerType.java()}[]" else "#{@_type.java()}"
 
     type: ->

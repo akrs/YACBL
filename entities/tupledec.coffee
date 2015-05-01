@@ -5,7 +5,7 @@ class TupleDec
         "(#{@names.join(' ')} #{@type?.join(' ')} #{@exp?.join(' ')})"
 
 #TODO, gotta fix this and do it later since java doesnt do tuples 
-    java: ->
+    java: (context) ->
         return "(_#{@names} #{type.java()} #{@exp.java()})"
 
 module.exports = TupleDec

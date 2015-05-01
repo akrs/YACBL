@@ -6,7 +6,7 @@ class Assign
     toString: ->
         "#{@varref} #{@op} #{@exp}"
 
-    java: ->
+    java: (context) ->
         return "#{@varref.java()} #{@op.lexeme} #{@exp.java()}"
         
     type: (context) ->

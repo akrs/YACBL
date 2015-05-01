@@ -5,7 +5,7 @@ class ArrayAccess
     toString: ->
         "#{@varref.id}[#{@exp}]"
 
-    java: ->
+    java: (context) ->
         return "_#{@varref.id}[#{@exp.java()}]"
 
     type: (context) ->

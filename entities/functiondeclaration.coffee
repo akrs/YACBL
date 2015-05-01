@@ -6,7 +6,7 @@ class FunctionDeclaration
         "(function #{@id} #{@params.join(' ')}
                   #{@returns.join(' ')} #{@block})"
     
-    java: ->
+    java: (context) ->
         rets = ""
         id = lookup[@id] || "_#{@id}"
         if id is 'main'

@@ -4,7 +4,7 @@ class Literal
     toString: ->
         "#{@token.lexeme}"
 
-    java: ->
+    java: (context) ->
         lit = if @type() is 'String' then "\"#{@token.lexeme}\"" else "#{@token.lexeme}"
         return lit
 

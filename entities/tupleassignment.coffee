@@ -5,7 +5,7 @@ class TupleAssignment
         "(#{@names.join(' ')} #{@exp?.join(' ')})"
 
     #TODO, same as tupledec
-    java: ->
+    java: (context) ->
         return "(_#{@names} #{@exp.java()})"
 
 module.exports = TupleAssignment

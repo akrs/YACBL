@@ -4,7 +4,7 @@ class Parameter
     toString: ->
         "(#{@name} : #{@type})"
 
-    java: ->
+    java: (context) ->
         return "(#{@type.lexeme} #{@name.lexeme})"
 
 module.exports = Parameter

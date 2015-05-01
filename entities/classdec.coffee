@@ -5,7 +5,7 @@ class ClassDec
     toString: ->
         "(Class #{@name} parent: #{@parent} Properties #{@properties.join(' ')})"
 
-    java: ->
+    java: (context) ->
         props = ""
         
         for property in @properties

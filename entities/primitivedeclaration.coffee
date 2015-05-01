@@ -5,7 +5,7 @@ class PrimitiveDeclaration
     toString: ->
         "#{@id} #{@_type?.lexeme} #{@exp?}"
 
-    java: ->
+    java: (context) ->
         return "#{@_type} _#{@id} = #{@exp.java()}"
 
     analyse: (context) ->

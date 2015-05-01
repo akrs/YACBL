@@ -4,7 +4,7 @@ class Program
     toString: ->
         "(Program #{@declarations.join(' ')})"
 
-    java: ->
+    java: (context) ->
         dec = ""
         for declaration in @declarations
                 dec += "\t#{declaration.java()}\n"

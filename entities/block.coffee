@@ -4,7 +4,7 @@ class Block
     toString: ->
         "(#{@statements.join(' ')})"
 
-    java: ->
+    java: (context) ->
         block = "{\n"
         for statement in @statements
             block += "#{statement.java()}\n"

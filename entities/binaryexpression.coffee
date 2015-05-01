@@ -8,7 +8,7 @@ class BinaryExpression
     toString: ->
         "(#{@leftSide} #{@op} #{@rightSide})"
             
-    java: ->
+    java: (context) ->
         return "#{@leftSide.java()} #{@op} #{@rightSide.java()}"
 
     typesBothInList: (list, context) ->

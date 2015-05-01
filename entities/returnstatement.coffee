@@ -4,7 +4,7 @@ class ReturnStatement
     toString: ->
         "#{@exps}"
 
-    java: () ->
+    java: (context) ->
         rets = ""
         for exp, i in @exps
             rets += "$returns_object._#{i} = #{exp.java()};\n"

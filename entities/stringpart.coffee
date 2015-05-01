@@ -4,7 +4,7 @@ class StringPart
     toString: ->
         "#{@parts.join(' ')}"
 
-    java: ->
+    java: (context) ->
         stringPart = '(""'
         for part in @parts
            part = if part.id then "_#{part.id}" else "\"#{part.lexeme}\""
