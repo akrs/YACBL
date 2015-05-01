@@ -6,10 +6,10 @@ class BinaryExpression
         @op = @opToken.lexeme
 
     toString: ->
-        "(#{@leftSide} #{@op} #{@rightSide}"
+        "(#{@leftSide} #{@op} #{@rightSide})"
             
     java: ->
-        return "{@leftSide.java()} #{@op} #{@rightSide.java()}"
+        return "#{@leftSide.java()} #{@op} #{@rightSide.java()}"
 
     typesBothInList: (list, context) ->
         typeMatch = (variable) ->
@@ -18,6 +18,7 @@ class BinaryExpression
         return typeMatch(@leftSide) and typeMatch(@rightSide)
 
     bothAreNumbers: (context) ->
+        console.log @leftSide
         return isNumber(@leftSide.type(context)) and isNumber(@rightSide.type(context))
 
     leastCommonNumber: (context) ->

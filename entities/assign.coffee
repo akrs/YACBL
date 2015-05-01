@@ -7,7 +7,7 @@ class Assign
         "#{@varref} #{@op} #{@exp}"
 
     java: ->
-        return "_{@varref.java()} #{@op} #{@exp.java()};"
+        return "#{@varref.java()} #{@op.lexeme} #{@exp.java()}"
         
     type: (context) ->
         return undefined

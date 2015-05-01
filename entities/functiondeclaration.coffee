@@ -16,11 +16,11 @@ class FunctionDeclaration
         else
             returnDeclorations = ""
             for type, i in @returns
-                returnDeclorations += "public #{type.java()} _#{i};\n"
-            rets = "class $returns_#{id}{\n#{returnDeclorations}}\n public static $returns_#{id}"
+                returnDeclorations += "public #{type.token.id} _#{i};\n"     #TODO type probably needs to be fixed
+            rets = "static class $returns_#{id}{\n#{returnDeclorations}}\n public static $returns_#{id}"
         params = ""
         for param in @params
-            params += "#{param.type} #{param.name.lexeme},"
+            params += "#{param.type} _#{param.name.lexeme},"
         params = params[..-2]
         return "#{rets} #{id}(#{params})#{@block.java(id)}"
 

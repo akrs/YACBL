@@ -226,11 +226,11 @@ parseFuncBlock = ->
     statements = []
     match '{'
     match 'EOL'
+    match 'EOL' while at 'EOL'
     while not at ['}', 'return']
-        match 'EOL' while at 'EOL'
         break if at '}'
         statements.push parseStatment()
-        match 'EOL'
+        match 'EOL' while at 'EOL'
     if at 'return'
         returns = parseReturnStatement()
         match 'EOL'
@@ -429,7 +429,7 @@ parseExp10 = ->
         return new Literal match()
     else
         error 'expression expected', tokens[0]
-
+        
 parseFuncCall = ->
     id = new VarRef match 'ID'
     match '('

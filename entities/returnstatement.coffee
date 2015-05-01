@@ -7,7 +7,7 @@ class ReturnStatement
     java: () ->
         rets = ""
         for exp, i in @exps
-            rets += "_return_object._#{i} = #{exp.java()};\n"
-        return "return _return_object;"
+            rets += "$returns_object._#{i} = #{exp.java()};\n"
+        return "#{rets}return $returns_object;"
 
 module.exports = ReturnStatement

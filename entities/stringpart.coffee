@@ -7,7 +7,7 @@ class StringPart
     java: ->
         stringPart = '(""'
         for part in @parts
-           part = if part.id then "#{part.id}" else "\"#{part.lexeme}\""
+           part = if part.id then "_#{part.id}" else "\"#{part.lexeme}\""
            stringPart += "+ (#{part})"
         return "#{stringPart})"
 
